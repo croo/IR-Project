@@ -1,4 +1,4 @@
-package main;
+package logic;
 
 import java.util.HashMap;
 import java.util.List;

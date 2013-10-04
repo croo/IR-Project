@@ -1,4 +1,4 @@
-package main;
+package logic;
 
 import java.util.Collections;
 import java.util.Comparator;

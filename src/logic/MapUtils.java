@@ -7,6 +7,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * 
+ * This class can be used to create an ordered list from a hashmap.
+ * 
+ * @author croo
+ *
+ */
 public class MapUtils
 {
     public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue( Map<K, V> map )

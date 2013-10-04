@@ -1,5 +1,6 @@
 package database.sentiwordnet;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,13 +44,33 @@ private static final String SENTIWORDNET_PATH = "sentiwordnet_data/SentiWordNet_
 	}
 
 	public Double getWeight(String word) {
+		List<Double> positiveWeights = new ArrayList<Double>();
+		List<Double> negativeWeights = new ArrayList<Double>();
 		for(String[] line: data) {
-			System.out.println(line[2]+","+line[3]+","+line[4]);
+			String sentinetWord = line[4];
+			Double positiveWeight = Double.parseDouble(line[2]);
+			Double negativeWeight = Double.parseDouble(line[3]);
+			if(sentinetWord.matches(".*([\t ]"+word+"#[1-9]*|^"+word+"#[1-9]*).*")) {
+				positiveWeights.add(positiveWeight);
+				negativeWeights.add(negativeWeight);
+			}
 		}
-		
-		return 0.0;
+		Double posAvg = getAverage(positiveWeights);
+		Double negAvg = getAverage(negativeWeights);
+		return posAvg - negAvg;
 	}
 
+	private Double getAverage(List<Double> numbers) {
+		Double result = 0.0;
+		for(Double number:numbers) {
+			result += number;
+		}
+		if(numbers.size() > 0)
+			return result / numbers.size();
+		else
+			return 0.0;
+	}
+	
 	@Override
 	protected void finalize() throws Throwable {
 		super.finalize();

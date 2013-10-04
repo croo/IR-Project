@@ -15,7 +15,7 @@ import au.com.bytecode.opencsv.CSVReader;
 
 public class CSVDatabase implements Database {
 
-	private static final String CSV_DIRECTORY = "csv_data/";
+	private static final String CSV_DIRECTORY = "";
 	
 	private CSVReader reader;
 

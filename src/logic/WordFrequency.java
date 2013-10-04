@@ -6,18 +6,29 @@ import java.util.Map;
 
 import twitter4j.Status;
 
+
+/**
+ * 
+ * This class gets a list of tweets and gives back varous types of statistics about it.
+ * Eg.: word frequency, number of words.
+ * 
+ * @author croo
+ *
+ */
 public class WordFrequency {
 
 	private List<Status> tweets;
 	
 	private Integer numberOfWords = 0;
 
+	private Map<String, Integer> wordFrequency;
+
 	public WordFrequency(List<Status> tweets) {
 		this.tweets = tweets;
-		
+		this.wordFrequency = generateWordFrequency();
 	}
 
-	public Map<String, Integer> getWordFrequency() {
+	private Map<String, Integer> generateWordFrequency() {
 		Map<String, Integer> result = new HashMap<String,Integer>();
 		
 		for(Status tweet : tweets) {
@@ -34,6 +45,10 @@ public class WordFrequency {
 		}
 		
 		return MapUtils.sortByValue(result);
+	}
+	
+	public Map<String,Integer> getWordFrequency() {
+		return wordFrequency;
 	}
 	
 	public Integer getTotalNumberOfWords() {

@@ -1,5 +1,11 @@
 package logic;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -10,7 +16,8 @@ import java.util.Map;
 
 /**
  * 
- * This class can be used to create an ordered list from a hashmap.
+ * This class contains the all-around common utilities of the code.
+ * Not very coherent and full of static methods. Anyway, its useful...
  * 
  * @author croo
  *
@@ -35,5 +42,19 @@ public class MapUtils
             result.put( entry.getKey(), entry.getValue() );
         }
         return result;
+    }
+    
+    public static List<String> readAllLines(String filename){  
+    	try {
+	        Path file = Paths.get(filename);  
+	        return Files.readAllLines(file, Charset.defaultCharset());  // with out loop we can read all the contents
+    	}catch (InvalidPathException e) {
+    		e.printStackTrace();
+    		System.err.println("Reading-all-lines util couldn't find the given file.");
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    		System.err.println("Reading-all-lines util crashed with an IOException while reading " + filename + " file.");
+    	}
+		return null;
     }
 }

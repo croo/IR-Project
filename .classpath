@@ -2,14 +2,14 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="/home/croo/msc/info_retrival/twitter4j/lib/twitter4j-core-3.0.3.jar" sourcepath="/home/croo/msc/info_retrival/emotional_analysis/twitter_emotional_analysis/lib/twitter4j-core-3.0.3-sources.jar">
+	<classpathentry kind="lib" path="./lib/twitter4j-core-3.0.3.jar" sourcepath="./lib/twitter4j-core-3.0.3-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/home/croo/msc/info_retrival/emotional_analysis/twitter_emotional_analysis/lib/twitter4j-core-3.0.3-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:file:./lib/twitter4j-core-3.0.3-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/croo/msc/info_retrival/emotional_analysis/twitter_emotional_analysis/lib/opencsv/opencsv-2.3.jar" sourcepath="lib/opencsv/src">
+	<classpathentry kind="lib" path="./lib/opencsv/opencsv-2.3.jar" sourcepath="lib/opencsv/src">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/home/croo/msc/info_retrival/emotional_analysis/twitter_emotional_analysis/lib/opencsv/doc/"/>
+			<attribute name="javadoc_location" value="file:./lib/opencsv/doc/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>

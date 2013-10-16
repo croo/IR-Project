@@ -11,25 +11,25 @@ import java.util.List;
 
 import database.Database;
 import twitter4j.Status;
+import twitter4j.User;
 import au.com.bytecode.opencsv.CSVReader;
 
 public class CSVDatabase implements Database {
 
-	private static final String CSV_DIRECTORY = "";
+	private static final String CSV_DIRECTORY = "csv_data/";
 	
 	private CSVReader reader;
 
+	private String fileName;
+
 	public CSVDatabase(String fileName) {
-		try {
-			reader = new CSVReader(new FileReader(CSV_DIRECTORY + fileName));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			System.err.println("\n I could not find the test database file.\n");
-		}
+		this.fileName = fileName;
+		
 	}
 
 	@Override
 	public List<Status> getTweets(String query) {
+		readCSVFile();
 		List<Status> tweets = new ArrayList<Status>();
 		String[] nextLine;
 		try {
@@ -55,6 +55,16 @@ public class CSVDatabase implements Database {
 		return tweets;
 	}
 
+	private void readCSVFile() {
+		try {
+			reader = new CSVReader(new FileReader(CSV_DIRECTORY + fileName));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			System.err.println("\n I could not find the test database file.\n");
+		}
+		
+	}
+
 	public Date getDateFromString(String dateString) {
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy");
@@ -70,5 +80,18 @@ public class CSVDatabase implements Database {
 	protected void finalize() throws Throwable {
 		super.finalize();
 		reader.close();
+	}
+
+	@Override
+	public List<String> getUsers(String namePrefix) {
+		List<Status> tweets = getTweets(namePrefix);
+		List<String> userNames = new ArrayList<String>();
+		for (Status tweet : tweets) {
+			String name = tweet.getUser().getName();
+			if(name.startsWith(namePrefix)){
+				userNames.add(name);
+			}
+		}
+		return userNames;
 	}
 }

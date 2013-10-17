@@ -1,6 +1,6 @@
 package logic;
 
-import database.sentiwordnet.SentiWordNet;
+import database.sentimental.SentiWordNet;
 
 
 /**
@@ -22,13 +22,23 @@ public class Word {
 		this.word = word;
 	}
 	
-	public String getWord() {
-		return word;
-	}
 	public Double getPositiveWeight() {
 		return positiveWeight;
 	}
 	public Double getNegativeWeight() {
 		return negativeWeight;
+	}
+	
+	@Override
+	public String toString() {
+		return word;
+	}
+
+	public void setPositiveWeight(Double average) {
+		positiveWeight = average;
+	}
+
+	public void setNegativeWeight(Double average) {
+		negativeWeight = average;
 	}
 }

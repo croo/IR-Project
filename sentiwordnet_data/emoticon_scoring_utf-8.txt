@@ -1,0 +1,148 @@
+0.875	0	:-)	smiley or happy face
+0.875	0	:)
+0.875	0	:o)
+0.875	0	:]
+0.875	0	:3 
+0.875	0	:c) 
+0.875	0	:> 
+0.875	0	=] 
+0.875	0	8) 
+0.875	0	=) 
+0.875	0	:} 
+0.875	0	:^) 
+0.875	0	:っ)
+0.125	0	:-D	laughing,big grin
+0.125	0	:D 
+0.125	0	8-D
+0.125	0	8D 
+0.125	0	x-D 
+0.125	0	xD 
+0.125	0	X-D 
+0.125	0	XD 
+0.125	0	=-D 
+0.125	0	=D 
+0.125	0	=-3 
+0.125	0	=3 
+0.125	0	B^D
+0.975	0	:-))	very happy or double chin
+0.125	0.75	>:[ 	sad
+0.125	0.75	:-(	
+0.125	0.75	:(  
+0.125	0.75	:-c 
+0.125	0.75	:c 
+0.125	0.75	:-<  
+0.125	0.75	:っC 
+0.125	0.75	:< 
+0.125	0.75	:-[ 
+0.125	0.75	:[ 
+0.125	0.75	:{	
+0.375	0.375	:-||	angry
+0.375	0.375	:@ 
+0.375	0.375	>:(
+0	0.5	:'-(	crying
+0	0.5	:'(
+0	0.5	QQ
+0.9	0	:'-)	tears of happiness
+0.9	0	:')
+0.375	0.25	D:<	horror
+0.375	0.25	D: 
+0.375	0.375	D8	disgust
+0	0.75	D;	sadness
+0	0.75	D=	
+0	0.75	D-':
+0.125	0.375	DX	dismay
+0.125	0.375	v.v 
+0.375	0.25	>:O	surprise
+0.375	0.25	:-O 
+0.375	0.25	:O 
+0.375	0.25	°o° 
+0.375	0.25	°O° 
+0.375	0.25	:O 
+0	0.5	o_O	shock
+0	0.5	o_0 
+0	0.5	o.O
+0	0.125	8-0	yawn
+0	0	:*	kiss
+0	0	:^* 
+0	0	( '}{' )
+0.375	0	;-)	Wink 
+0.375	0	;) 
+0.375	0	*-) 
+0.375	0	*) 
+0.375	0	;-] 
+0.375	0	;] 
+0.375	0	;D 
+0.375	0	;^) 
+0.375	0	:-,	smirk
+0	0.5	>:P	Tongue sticking out, cheeky/playful, blowing a raspberry
+0	0.5	:-P 
+0	0.5	:P 
+0	0.5	X-P 
+0	0.5	x-p 
+0	0.5	xp 
+0	0.5	XP 
+0	0.5	:-p
+0	0.5	:p
+0	0.5	=p 
+0	0.5	:-Þ 
+0	0.5	:Þ 
+0	0.5	:-b 
+0	0.5	:b
+0.125	0.375	>:\	Skeptical, undecided, uneasy, hesitant
+0.125	0.375	>:/ 
+0.125	0.375	:-/ 
+0.125	0.375	:-. 
+0.125	0.375	:/ 
+0.125	0.375	:\ 
+0.125	0.375	=/ 
+0.125	0.375	=\ 
+0	0.625	:L	hesitant
+0	0.625	=L 
+0	0.625	:S 
+0	0.625	>.<	annoyed
+0.125	0.125	:|	straight face, no expression, indecision
+0.125	0.125	:-|
+0	0.375	:$	embarrassed
+0	0	:-X	sealed lips
+0	0	:X 
+0	0	:-# 
+0	0	:#
+0.625	0.25	O:-)	angel, saint, innocent
+0.625	0.25	0:-3 
+0.625	0.25	0:3 
+0.625	0.25	0:-) 
+0.625	0.25	0:) 
+0.625	0.25	0;^)
+0.444	0.556	>:)	evil
+0.444	0.556	>;) 
+0.444	0.556	>:-)
+0.125	0.375	}:-)	devilish
+0.125	0.375	}:) 
+0.125	0.375	3:-) 
+0.125	0.375	3:)
+0.125	0	o/\o	high five
+0.125	0	^5 
+0.125	0	>_>^ ^<_<
+0.5	0	|;-)	cool
+0.375	0.25	|-O	bored
+0	0	:-&	tongue-tied
+0	0	:&
+0.125	0	#-)	partied all night
+0.125	0	%-)
+0.125	0	%)
+0	0.5	:-###..	being sick
+0	0.5	:###..
+0	0.25	<:-|	dumb, dunce-like
+0	0.25	ಠ_ಠ	look of disapproval. The Unicode character ಠ is from the Kannada alphabet and can be called differently in HTML notation: &#3232; and &#x0CA0; (for Unicode)
+0.75	0	\o/	cheer "Yay, yay."	
+0.125	0	*\0/*	cheerleader
+0.625	0	<3  	heart
+0	0.625	</3	heart-broken
+0	0	~(_8^(I)	Homer Simpson
+0	0	5:-) ~:-\	Elvis Presley
+0	0	//0-0\\	John Lennon
+0	0	*<|:-)	Santa Claus
+0	0	=:o]	Bill Clinton
+0	0	,:-) 7:^]	Ronald Reagan
+0	0.5	<*)))-{ ><(((*> ><>	fishy
+0	0	@}-;-'--- @>-->--	rose

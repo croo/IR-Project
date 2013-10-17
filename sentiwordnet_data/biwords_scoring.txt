@@ -1,0 +1,30 @@
+0.125	0.6	what the fuck
+0.025	0.5	what the hell
+0.325	0.5	holy shit
+0.6	0	thank lord
+0.6	0	thank god
+0.125	0.5	fuck up
+0	0.625	bad mood
+0.5	0	best wishes
+0.625	0.105	can not wait
+0.1	0.4	heart broken
+0.125	0.5	fuck off
+0	0.375	damn it
+0.3	0.2	how kind
+0.125	0.6	whatthefuck
+0.125	0.6	wtf
+0.025	0.5	whatthehell
+0.325	0.5	holyshit
+0.6	0	thanklord
+0.6	0	thankgod
+0.125	0.5	fuckup
+0	0.625	badmood
+0.5	0	bestwishes
+0.625	0.105	cannotwait
+0.1	0.4	heartbroken
+0.125	0.5	fuckoff
+0	0.375	damnit
+0.3	0.2	howkind
+0.550	0.05	Oh my God
+0.650	0.05	OMG
+0.700	0.025	LOL

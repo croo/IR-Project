@@ -1,16 +1,22 @@
-package database.sentiwordnet;
+package database.sentimental;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import logic.MapUtils;
+import logic.Utils;
+import logic.Word;
 
 /**
  * 
- * A Singleton class of SentiWordNet data set.
+ * A Singleton class of SentiWordNet data se
+public class Weights {
+
+}
+t.
  * 
  * Usage
  * 
@@ -19,7 +25,7 @@ import logic.MapUtils;
  */
 public class SentiWordNet {
 
-	private static final int WORDS = 4;
+	private static final int WORDS_COLUMN = 4;
 
 	private static final String SENTIWORDNET_PATH = "sentiwordnet_data/SentiWordNet_3.0.0_20130122.txt";
 
@@ -27,7 +33,7 @@ public class SentiWordNet {
 
 	private List<String[]> data = new LinkedList<String[]>();
 
-	private Map<String, Pair> sentiWords;
+	private Map<String, Weight> words;
 
 	public static SentiWordNet getInstance() {
 		if (INSTANCE == null) {
@@ -39,39 +45,42 @@ public class SentiWordNet {
 	private SentiWordNet() {
 		System.out.println("Initializing sentiWordNet database...");
 		Integer lineNo = 0;
-		List<String> csvLines = MapUtils.readAllLines(SENTIWORDNET_PATH);
+		List<String> csvLines = Utils.readAllLines(SENTIWORDNET_PATH,Charset.defaultCharset());
 		for (String line : csvLines) {
 			lineNo++;
 			data.add(line.split("\t"));
 		}
-		createWordList();
+		createDictionary();
 		System.out.println("Done.");
 	}
+	
+	public Boolean containsWord(Word word) {
+		return words.containsKey(getKey(word));
+	}
+	
+	private String getKey(Word word) {
+		return word.toString().toLowerCase().replaceAll("[.! ,\"]","");
+	}
 
-	private void createWordList() {
-		sentiWords = new HashMap<>();
+	private void createDictionary() {
+		words = new HashMap<>();
 		for (String[] line : data) {
-			String[] words = line[WORDS].split(" ");
+			String[] wordsFromData = line[WORDS_COLUMN].split(" ");
 			Double positiveWeight = Double.parseDouble(line[2]);
 			Double negativeWeight = Double.parseDouble(line[3]);
-			for (int i = 0; i < words.length; i++) {
-				String word = words[i].split("#")[0].trim();
-				if (!sentiWords.containsKey(word)) {
-					sentiWords.put(word, new Pair());
+			for (int i = 0; i < wordsFromData.length; i++) {
+				String word = wordsFromData[i].split("#")[0].trim();
+				if (!words.containsKey(word)) {
+					words.put(word, new Weight());
 				}
-				sentiWords.get(word).positive.add(positiveWeight);
-				sentiWords.get(word).negative.add(negativeWeight);
+				words.get(word).positive.add(positiveWeight);
+				words.get(word).negative.add(negativeWeight);
 			}
 		}
 	}
 
-	public Double getWeight(String word) {
-		Pair weights = sentiWords.get(word);
-		if (weights != null) {
-			return getAverage(weights.positive) - getAverage(weights.negative);
-		} else {
-			return null;
-		}
+	public Weight getWeight(Word word) {
+		return words.get(getKey(word));
 	}
 
 	@Deprecated
@@ -79,7 +88,7 @@ public class SentiWordNet {
 		List<Double> positiveWeights = new ArrayList<Double>();
 		List<Double> negativeWeights = new ArrayList<Double>();
 		for (String[] line : data) {
-			String sentinetWord = line[WORDS];
+			String sentinetWord = line[WORDS_COLUMN];
 			Double positiveWeight = Double.parseDouble(line[2]);
 			Double negativeWeight = Double.parseDouble(line[3]);
 			if (sentinetWord.matches(".*([\t ]" + word + "#[1-9]*|^" + word
@@ -104,10 +113,4 @@ public class SentiWordNet {
 			return 0.0;
 	}
 
-	private class Pair {
-		
-		public List<Double> positive = new ArrayList<>();
-		public List<Double> negative = new ArrayList<>();
-
-	}
 }

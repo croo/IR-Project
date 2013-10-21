@@ -15,8 +15,8 @@ import database.sentimental.Weight;
 public class TweetAnalyzer {
 
 	Logger log = LoggerFactory.getLogger(TweetAnalyzer.class);
-	private static final double UPPERCASE_BONUS = 0.1;
-	private static final double EXCLAMATION_BONUS = 0.1;
+	private static final double UPPERCASE_BONUS = 1.1;
+	private static final double EXCLAMATION_BONUS = 1.1;
 	private SentiWordNet sentiWordNet;
 	private Emoticons emoticons;
 	private BoostWords boostWords;

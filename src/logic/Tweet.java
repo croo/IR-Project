@@ -25,7 +25,7 @@ public class Tweet {
 	public Double getAveragePositiveWeight() {
 		List<Double> weights = new ArrayList<Double>();
 		for (Word w : words) {
-			weights.add(w.getPositiveWeight());
+			weights.add(w.getPositiveBayesianWeight());
 		}
 		return Utils.getAverage(weights);
 	}
@@ -33,11 +33,14 @@ public class Tweet {
 	public Double getAverageNegativeWeight() {
 		List<Double> weights = new ArrayList<Double>();
 		for (Word w : words) {
-			weights.add(w.getNegativeWeight());
+			weights.add(w.getNegativeBayesianWeight());
 		}
 		return Utils.getAverage(weights);
 	}
 	
+	public String getOriginalText() {
+		return originalText;
+	}
 	
 	/**
 	 * tweet=    sad    happy cake. 

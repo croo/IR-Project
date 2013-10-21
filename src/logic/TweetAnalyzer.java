@@ -76,6 +76,7 @@ public class TweetAnalyzer {
 		} else if (emoticons.containsWord(word)) {
 			weight = emoticons.getWeight(word);
 		} else {
+			List<Word> possibleGoodWords = sanitizeAndSpellcheck(word);
 			numberOfUnknownWords++;
 			noValueFound.add(word);
 		}
@@ -83,19 +84,19 @@ public class TweetAnalyzer {
 		word.setNegativeWeight(Utils.getAverage(weight.negative));
 		
 		postprocessBonuses(word);
-		
-		log.trace(word + " : ( +{}; -{})",word.getPositiveWeight(),word.getNegativeWeight());
+		//System.out.println(""+word +"\t" + word.getPositiveBayesianWeight() + "\t" + word.getNegativeBayesianWeight());
+		log.trace(word + " : ( +{}; -{})",word.getPositiveBayesianWeight(),word.getNegativeBayesianWeight());
 	}
 
 	private void postprocessBonuses(Word word) {
 		if(isUpperCase(word)) {
-			word.setPositiveWeight(word.getPositiveWeight()*UPPERCASE_BONUS);
-			word.setNegativeWeight(word.getNegativeWeight()*UPPERCASE_BONUS);
+			word.setPositiveWeight(word.getPositiveBayesianWeight()*UPPERCASE_BONUS);
+			word.setNegativeWeight(word.getNegativeBayesianWeight()*UPPERCASE_BONUS);
 		}
 		
 		if(haveExclamationMark(word)) {
-			word.setPositiveWeight(word.getPositiveWeight()*EXCLAMATION_BONUS);
-			word.setNegativeWeight(word.getNegativeWeight()*EXCLAMATION_BONUS);
+			word.setPositiveWeight(word.getPositiveBayesianWeight()*EXCLAMATION_BONUS);
+			word.setNegativeWeight(word.getNegativeBayesianWeight()*EXCLAMATION_BONUS);
 		}
 	}
 	

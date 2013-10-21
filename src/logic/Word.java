@@ -29,6 +29,14 @@ public class Word {
 		return negativeWeight;
 	}
 	
+	public Double getPositiveBayesianWeight() {
+		return (positiveWeight + negativeWeight == 0) ? 0:positiveWeight / (positiveWeight + negativeWeight);
+	}
+	
+	public Double getNegativeBayesianWeight() {
+		return (positiveWeight + negativeWeight == 0) ? 0:negativeWeight / (positiveWeight + negativeWeight);
+	}
+	
 	@Override
 	public String toString() {
 		return word;

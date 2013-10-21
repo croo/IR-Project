@@ -15,12 +15,17 @@ import database.sentimental.SentiWordNet;
 public class Main {
 	 public static void main(String[] args) {
 		 
-		 	System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "INFO");
+		 	System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "ERROR");
 		 	System.setProperty(org.slf4j.impl.SimpleLogger.LOG_FILE_KEY, "System.out");
 		 	
 		 	String hashTagQuery = "#happy";
+		 	String csvDatabaseFile = "happy.txt";
+		 	if(args.length != 0) {
+		 		hashTagQuery = args[0];
+		 		csvDatabaseFile = args[1];
+		 	}
 
-		 	Database database = new CSVDatabase("happy.txt");
+		 	Database database = new CSVDatabase(csvDatabaseFile);
 		 	List<Status> tweets = database.getTweets(hashTagQuery);
 		 	
 		 	SentiWordNet sentiWordNet = SentiWordNet.getInstance();
@@ -30,16 +35,17 @@ public class Main {
 		 	TweetAnalyzer analyzer = new TweetAnalyzer(sentiWordNet,emoticons,boostWords);
 		 	HashTag hashTag = new HashTag(hashTagQuery);
 		 	for (Status tweet : tweets) {
-		 		System.out.println("\n");
+		 		//System.out.println("\n");
 		 		Tweet analyzedTweet = analyzer.getAnalyzedTweet(tweet);
 		 		hashTag.add(analyzedTweet);
-		 		System.out.println("Positive : " + analyzedTweet.getBayesianPositiveWeight());
-		 		System.out.println("Negative : " + analyzedTweet.getBayesianNegativeWeight());
+		 		//System.out.println(analyzedTweet.toString() +"\t"+analyzedTweet.getBayesianPositiveWeight() +"\t"+analyzedTweet.getBayesianNegativeWeight());
+		 		//System.out.println("Positive : " + analyzedTweet.getBayesianPositiveWeight());
+		 		//System.out.println("Negative : " + analyzedTweet.getBayesianNegativeWeight());
 			}
 		 	
-		 	System.out.println("------------------------------");
-		 	System.out.println("This hashtag's positive weight: " + hashTag.getBayesianPositiveWeight());
-		 	System.out.println("This hashtag's negative weight: " + hashTag.getBayesianNegativeWeight());
+		 	//System.out.println("------------------------------");
+		 	//System.out.println("This hashtag's positive weight: " + hashTag.getBayesianPositiveWeight());
+		 	//System.out.println("This hashtag's negative weight: " + hashTag.getBayesianNegativeWeight());
 		 	
 		 	
 		 	

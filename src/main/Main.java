@@ -2,26 +2,52 @@ package main;
 
 import java.util.List;
 
+import logic.HashTag;
+import logic.Tweet;
+import logic.TweetAnalyzer;
 import twitter4j.Status;
 import database.Database;
 import database.csv.CSVDatabase;
+import database.sentimental.BoostWords;
+import database.sentimental.Emoticons;
+import database.sentimental.SentiWordNet;
 
 public class Main {
 	 public static void main(String[] args) {
-		 	Database database = new CSVDatabase("happy.txt");
-		 	List<Status> tweets = database.getTweets("#happy");
+		 
+		 	System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "INFO");
+		 	System.setProperty(org.slf4j.impl.SimpleLogger.LOG_FILE_KEY, "System.out");
 		 	
-		 	for(Status tweet: tweets) {
-		 		System.out.println(tweet.getText());
-		 		String message = tweet.getText();
-		 		message = message.replaceAll("@[A-Za-z0-9_]*","");
-		 		message = message.replaceAll("#","");
-		 		message = message.replaceAll("(http://.*[.].*/.*[ ]|http://.*[.].*/.*$)","");
-		 		message = message.replaceAll("[ ]+"," ");
-		 		
-		 		System.out.println(message);
-		 		System.out.println("");
-		 	}
+		 	String hashTagQuery = "#happy";
+
+		 	Database database = new CSVDatabase("happy.txt");
+		 	List<Status> tweets = database.getTweets(hashTagQuery);
+		 	
+		 	SentiWordNet sentiWordNet = SentiWordNet.getInstance();
+		 	Emoticons emoticons = Emoticons.getInstance();
+		 	BoostWords boostWords = BoostWords.getInstance();
+		 	
+		 	TweetAnalyzer analyzer = new TweetAnalyzer(sentiWordNet,emoticons,boostWords);
+		 	HashTag hashTag = new HashTag(hashTagQuery);
+		 	for (Status tweet : tweets) {
+		 		System.out.println("\n");
+		 		Tweet analyzedTweet = analyzer.getAnalyzedTweet(tweet);
+		 		hashTag.add(analyzedTweet);
+		 		System.out.println("Positive : " + analyzedTweet.getBayesianPositiveWeight());
+		 		System.out.println("Negative : " + analyzedTweet.getBayesianNegativeWeight());
+			}
+		 	
+		 	System.out.println("------------------------------");
+		 	System.out.println("This hashtag's positive weight: " + hashTag.getBayesianPositiveWeight());
+		 	System.out.println("This hashtag's negative weight: " + hashTag.getBayesianNegativeWeight());
+		 	
+		 	
+		 	
+		 	/*String searchString = tweets.get(0).getUser().getName();
+		 	List<String> users = database.getUsers("@a");
+		 	for (String user : users) {
+				System.out.println(user);
+			}*/
 		 	
 //		 	WordFrequency wf = new WordFrequency(tweets);
 //		 	wf.getTotalNumberOfWords();
@@ -39,6 +65,7 @@ public class Main {
 //		 	System.out.println("cake: " + s.getWeight("cake"));
 //		 	System.out.println("orange: " + s.getWeight("orange"));
 //		 	System.out.println("disaster: " + s.getWeight("disaster"));
+
 //		 	System.out.println("earthquake: " + s.getWeight("earthquake"));
 	    }
 }

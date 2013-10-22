@@ -40,9 +40,9 @@ public class TwitterAPIDatabase implements Database{
 //            do {
                 result = twitter.search(query);
                 tweets = result.getTweets();
-                for (Status tweet : tweets) {
-                    System.out.println(tweet.getCreatedAt() + " - @" + tweet.getUser().getScreenName() + " - " + tweet.getText());
-                }
+//                for (Status tweet : tweets) {
+//                    System.out.println(tweet.getCreatedAt() + " - @" + tweet.getUser().getScreenName() + " - " + tweet.getText());
+//                }
 //            } while ((query = result.nextQuery()) != null);
         } catch (TwitterException e) {
             e.printStackTrace();

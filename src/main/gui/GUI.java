@@ -11,13 +11,13 @@ import javax.swing.JTextField;
 
 public class GUI {
 
-	private final String FRAME_DESCR = "Twitter emotion analysis";
+	private static final String FRAME_DESCR = "Twitter emotion analysis";
 	
-	protected JFrame mainframe;
-	protected JPanel mainPanel;
-	protected TabPanes tabPanes;
+	private static JFrame mainframe;
+	private static JPanel mainPanel;
+	private static TabPanes tabPanes;
 	
-	public GUI () {
+	public static void main (String[] args) {
 		mainframe = new JFrame(FRAME_DESCR);
 		mainframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainframe.setSize(300, 300);

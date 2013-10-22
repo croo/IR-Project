@@ -80,7 +80,6 @@ public class TabPanes {
 		});
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void generateHashPanel () {
 		hashPanel = new JPanel();
 		hashPanel.setLayout(null);

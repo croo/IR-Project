@@ -1,0 +1,5 @@
+dont : don't
+isnt : isn't
+hasnt : hasn't
+havent : haven't
+im : i'm

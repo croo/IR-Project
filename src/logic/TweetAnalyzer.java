@@ -1,12 +1,19 @@
 package logic;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import twitter4j.Status;
+
+import com.swabunga.spell.engine.SpellDictionaryHashMap;
+
 import database.sentimental.BoostWords;
 import database.sentimental.Emoticons;
 import database.sentimental.SentiWordNet;
@@ -20,6 +27,13 @@ public class TweetAnalyzer {
 	private SentiWordNet sentiWordNet;
 	private Emoticons emoticons;
 	private BoostWords boostWords;
+	
+	/*
+	 * This is a datastructure needed for Jazzy spell checker to calculate crazy things.
+	 * The Jazzy uses it somewhere deep in the code and resizes it as needed, but it is much more efficent to
+	 * create it here. 
+	 */
+	private int[][] spellcheckMatrix = new int[0][0];
 	
 	public static int numberOfUnknownWords = 0;
 
@@ -76,9 +90,15 @@ public class TweetAnalyzer {
 		} else if (emoticons.containsWord(word)) {
 			weight = emoticons.getWeight(word);
 		} else {
-			List<Word> possibleGoodWords = sanitizeAndSpellcheck(word);
-			numberOfUnknownWords++;
-			noValueFound.add(word);
+			Word w = sanitizeAndSpellcheck(word);
+			if (emoticons.containsWord(w)) {
+				weight = emoticons.getWeight(w);
+			} else {
+				numberOfUnknownWords++;
+				noValueFound.add(word);
+				numberOfUnknownWords++;
+				noValueFound.add(w);
+			}
 		}
 		word.setPositiveWeight(Utils.getAverage(weight.positive));
 		word.setNegativeWeight(Utils.getAverage(weight.negative));
@@ -86,6 +106,20 @@ public class TweetAnalyzer {
 		postprocessBonuses(word);
 		//System.out.println(""+word +"\t" + word.getPositiveBayesianWeight() + "\t" + word.getNegativeBayesianWeight());
 		log.trace(word + " : ( +{}; -{})",word.getPositiveBayesianWeight(),word.getNegativeBayesianWeight());
+	}
+
+	private Word sanitizeAndSpellcheck(Word word) {
+		 return spellCheck(sanitize(word));
+	}
+
+	private Word spellCheck(Word sanitize) {
+		return sanitize;
+	}
+
+	private Word sanitize(Word word) {
+		String sameCharacterMultipleTimes = "(.)(\\1)+";
+		word = new Word(word.toString().replaceAll(sameCharacterMultipleTimes,"$1"));
+		return word;
 	}
 
 	private void postprocessBonuses(Word word) {

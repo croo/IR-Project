@@ -34,6 +34,7 @@ public class TweetAnalyzer {
 	}
 
 	private void initSpellChecker() {
+		System.out.println("Initializing JaSpell checker...");
 		spellChecker = new SpellChecker();
 		String dictionary = "english_dict/english.txt";
 		String commonMisspells = "english_dict/common-misspells.txt";
@@ -43,6 +44,7 @@ public class TweetAnalyzer {
 			e.printStackTrace();
 			log.error("Initialization of the spellchecker failed with the following parameters:\n {}, {}, {}",dictionary,commonMisspells);
 		}
+		System.out.println("Done.");
 	}
 
 	public Tweet getAnalyzedTweet(Status rawTweet) {
@@ -216,5 +218,12 @@ public class TweetAnalyzer {
 		Tweet result = analyzeTweet(text);
 		return result;
 	}
-	
+
+	public List<Tweet> getAnalyzedTweets(List<Status> tweets) {
+		List<Tweet> analyzedTweets = new ArrayList<>();
+		for (Status tweet : tweets) {
+			analyzedTweets.add(getAnalyzedTweet(tweet));
+		}
+		return analyzedTweets;
+	}
 }

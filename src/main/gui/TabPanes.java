@@ -2,15 +2,24 @@ package main.gui;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+
+import logic.HashTag;
+import logic.Tweet;
+import logic.TweetAnalyzer;
+import twitter4j.Status;
+import database.Database;
+import database.csv.CSVDatabase;
+import database.twitter.TwitterAPIDatabase;
 
 
 public class TabPanes {
@@ -29,19 +38,46 @@ public class TabPanes {
 	protected JRadioButton hashTweetAPIButton, userTweetAPIButton, hashCsvButton, userCsvButton;
 	protected ButtonGroup hashGroup, userGroup;
 	protected JTextField hashCsvFileField, userCsvFileField;
+	private JTextField hashQueryField;
+	private ButtonGroup hashButtonGroup;
+	private TweetAnalyzer analyzer;
 	
-	public TabPanes (JPanel topPanel) {
+	public TabPanes (JPanel topPanel, TweetAnalyzer analyzer) {
 		this.topPanel = topPanel;
+		this.analyzer = analyzer;
 		tabs = new JTabbedPane();
 		tabInit();
 	}
 	
 	private void tabInit () {
 		generateHashPanel();
+		initHashSearchButton();
 		tabs.addTab("Analysis on hash", hashPanel);
 		generateUserPanel();
 		tabs.addTab("Analysis on user", userPanel);
 		topPanel.add(tabs);
+	}
+	
+	private void initHashSearchButton() {
+		searchHashButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String query = hashQueryField.getText();
+				Database db = null;
+				if(hashCsvButton.isSelected()) {
+					db = new CSVDatabase(hashCsvFileField.getText().trim());
+				} else if (hashTweetAPIButton.isSelected()) {
+					db = new TwitterAPIDatabase();
+				}
+				
+				List<Status> tweets = db.getTweets(query);
+				HashTag hashtag = new HashTag(query);
+				List<Tweet> analyzedTweets = analyzer.getAnalyzedTweets(tweets);
+				hashtag.addAll(analyzedTweets);
+				JOptionPane.showMessageDialog(null, "The query '" + query + "' have the following semantical value: \n +" + hashtag.getBayesianPositiveWeight() +"; -" + hashtag.getBayesianNegativeWeight());
+			}
+		});
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -53,10 +89,10 @@ public class TabPanes {
 		hashLabel.setBounds(40, 20, 70, 20);
 		hashPanel.add(hashLabel);
 		
-		JComboBox hashComboBox = new JComboBox(hashComboExample);
-		hashComboBox.setBounds(140, 20, 140, 20);
-		hashPanel.add(hashComboBox);
-		
+		hashQueryField = new JTextField();
+		hashQueryField.setBounds(140, 20, 140, 20);
+		hashPanel.add(hashQueryField);
+	
 		searchHashButton = new JButton ("Search");
 		searchHashButton.setBounds(110, 70, 100, 30);
 		hashPanel.add(searchHashButton);
@@ -65,7 +101,7 @@ public class TabPanes {
 		hashCsvFileField.setBounds(160, 172, 120, 20);
 		hashPanel.add(hashCsvFileField); 
 		
-		ButtonGroup group = new ButtonGroup();
+		hashButtonGroup = new ButtonGroup();
 		
 		hashTweetAPIButton = new JRadioButton("Use Twitter API Database");
 		hashTweetAPIButton.setBounds(0, 120, 180, 40);
@@ -89,7 +125,7 @@ public class TabPanes {
 		});
 		hashPanel.add(hashCsvButton);
 		
-		group.add(hashTweetAPIButton); group.add(hashCsvButton);
+		hashButtonGroup.add(hashTweetAPIButton); hashButtonGroup.add(hashCsvButton);
 	}
 	
 	private void generateUserPanel () {

@@ -61,4 +61,8 @@ public class HashTag {
 		tweets.add(analyzedTweet);
 	}
 	
+	public void addAll(List<Tweet> analyzedTweets) {
+		tweets.addAll(analyzedTweets);
+	}
+	
 }

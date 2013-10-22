@@ -1,5 +1,6 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import logic.HashTag;
@@ -12,7 +13,8 @@ import database.sentimental.BoostWords;
 import database.sentimental.Emoticons;
 import database.sentimental.SentiWordNet;
 
-public class Main {
+public class CommandLineTool {
+	
 	 public static void main(String[] args) {
 		 
 		 	System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "warn");
@@ -20,6 +22,9 @@ public class Main {
 		 	
 		 	String hashTagQuery = "#happy";
 		 	String csvDatabaseFile = "happy.txt";
+		 	Double lowConfidenceLevel = 0.2;
+		 	List<Tweet> lowConfidenceTweets = new ArrayList<>();
+		 	
 		 	if(args.length != 0) {
 		 		hashTagQuery = args[0];
 		 		csvDatabaseFile = args[1];
@@ -41,6 +46,10 @@ public class Main {
 		 		//System.out.println(analyzedTweet.toString() +"\t"+analyzedTweet.getBayesianPositiveWeight() +"\t"+analyzedTweet.getBayesianNegativeWeight());
 		 		System.out.println("Positive : " + analyzedTweet.getBayesianPositiveWeight());
 		 		System.out.println("Negative : " + analyzedTweet.getBayesianNegativeWeight());
+		 		
+		 		if(analyzedTweet.getConfidenceLevel() < lowConfidenceLevel) {
+		 			lowConfidenceTweets.add(analyzedTweet);
+		 		}
 			}
 		 	
 		 	System.out.println("------------------------------");
@@ -48,31 +57,10 @@ public class Main {
 		 	System.out.println("This hashtag's negative weight: " + hashTag.getBayesianNegativeWeight());
 		 	System.out.flush();
 		 	
-		 	//analyzer.getAnalyzedTweet("Casually getting ready while Theo sleeps! #gettingready #rollers #longhair #pout #smile #cute #happy… http://t.co/YDtLvDLGjF");
+		 	System.out.println("------------------------------");
+		 	System.out.println("Tweets with low confidence levels: ");
 		 	
-		 	/*String searchString = tweets.get(0).getUser().getName();
-		 	List<String> users = database.getUsers("@a");
-		 	for (String user : users) {
-				System.out.println(user);
-			}*/
 		 	
-//		 	WordFrequency wf = new WordFrequency(tweets);
-//		 	wf.getTotalNumberOfWords();
-//		 	Map<String,Integer> wf_map = wf.getWordFrequency();
-//		 	
-//		 	for(Map.Entry<String, Integer> entry : wf_map.entrySet()) {
-//		 		System.out.println(entry.getKey()+ args[1] + " "+entry.getValue() + "\r");
-//		 	}
-		 
-		 
-		 
-//		 	SentiWordNet s = SentiWordNet.getInstance();
-//		 	System.out.println("Sad: " + s.getWeight("sad"));
-//		 	System.out.println("Happy: " + s.getWeight("happy"));
-//		 	System.out.println("cake: " + s.getWeight("cake"));
-//		 	System.out.println("orange: " + s.getWeight("orange"));
-//		 	System.out.println("disaster: " + s.getWeight("disaster"));
-
-//		 	System.out.println("earthquake: " + s.getWeight("earthquake"));
+		 	
 	    }
 }

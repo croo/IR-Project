@@ -14,4 +14,9 @@ public class Weight {
 		this.positive.add(positive);
 		this.negative.add(negative);
 	}
+	
+	public void add(Weight w) {
+		positive.addAll(w.positive);
+		negative.addAll(w.negative);
+	}
 }

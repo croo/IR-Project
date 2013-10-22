@@ -15,7 +15,7 @@ import database.sentimental.SentiWordNet;
 public class Main {
 	 public static void main(String[] args) {
 		 
-		 	System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "ERROR");
+		 	System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "warn");
 		 	System.setProperty(org.slf4j.impl.SimpleLogger.LOG_FILE_KEY, "System.out");
 		 	
 		 	String hashTagQuery = "#happy";
@@ -39,15 +39,16 @@ public class Main {
 		 		Tweet analyzedTweet = analyzer.getAnalyzedTweet(tweet);
 		 		hashTag.add(analyzedTweet);
 		 		//System.out.println(analyzedTweet.toString() +"\t"+analyzedTweet.getBayesianPositiveWeight() +"\t"+analyzedTweet.getBayesianNegativeWeight());
-		 		//System.out.println("Positive : " + analyzedTweet.getBayesianPositiveWeight());
-		 		//System.out.println("Negative : " + analyzedTweet.getBayesianNegativeWeight());
+		 		System.out.println("Positive : " + analyzedTweet.getBayesianPositiveWeight());
+		 		System.out.println("Negative : " + analyzedTweet.getBayesianNegativeWeight());
 			}
 		 	
-		 	//System.out.println("------------------------------");
-		 	//System.out.println("This hashtag's positive weight: " + hashTag.getBayesianPositiveWeight());
-		 	//System.out.println("This hashtag's negative weight: " + hashTag.getBayesianNegativeWeight());
+		 	System.out.println("------------------------------");
+		 	System.out.println("This hashtag's positive weight: " + hashTag.getBayesianPositiveWeight());
+		 	System.out.println("This hashtag's negative weight: " + hashTag.getBayesianNegativeWeight());
+		 	System.out.flush();
 		 	
-		 	
+		 	//analyzer.getAnalyzedTweet("Casually getting ready while Theo sleeps! #gettingready #rollers #longhair #pout #smile #cute #happy… http://t.co/YDtLvDLGjF");
 		 	
 		 	/*String searchString = tweets.get(0).getUser().getName();
 		 	List<String> users = database.getUsers("@a");

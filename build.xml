@@ -3,9 +3,9 @@
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
     <target name="create_run_jar">
-        <jar destfile="/home/croo/msc/info_retrival/emotional_analysis/twitter_emotional_analysis/jar/ver0.1.jar" filesetmanifest="mergewithoutmain">
+        <jar destfile="/home/croo/msc/info_retrival/emotional_analysis/twitter_emotional_analysis/jar/emo_1.0.jar" filesetmanifest="mergewithoutmain">
             <manifest>
-                <attribute name="Main-Class" value="main.Main"/>
+                <attribute name="Main-Class" value="main.gui.GUI"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="/home/croo/msc/info_retrival/emotional_analysis/twitter_emotional_analysis/bin"/>
@@ -13,6 +13,7 @@
             <zipfileset excludes="META-INF/*.SF" src="/home/croo/msc/info_retrival/emotional_analysis/twitter_emotional_analysis/lib/opencsv/opencsv-2.3.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="/home/croo/msc/info_retrival/emotional_analysis/twitter_emotional_analysis/lib/slf4j-api-1.7.5.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="/home/croo/msc/info_retrival/emotional_analysis/twitter_emotional_analysis/lib/slf4j-simple-1.7.5.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/home/croo/msc/info_retrival/emotional_analysis/twitter_emotional_analysis/lib/jaspell.zip"/>
         </jar>
     </target>
 </project>

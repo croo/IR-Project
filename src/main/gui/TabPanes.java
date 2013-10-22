@@ -26,16 +26,17 @@ public class TabPanes {
 	protected JButton searchHashButton;
 	protected JButton searchUserButton;
 	
-	protected JRadioButton hashTweetAPI, userTweetAPI, hashCvsFile, userCvsFile;
+	protected JRadioButton hashTweetAPIButton, userTweetAPIButton, hashCsvButton, userCsvButton;
 	protected ButtonGroup hashGroup, userGroup;
-	protected JTextField hashFileField, userFileField;
+	protected JTextField hashCsvFileField, userCsvFileField;
 	
 	public TabPanes (JPanel topPanel) {
 		this.topPanel = topPanel;
 		tabs = new JTabbedPane();
+		tabInit();
 	}
 	
-	public void tabInit () {
+	private void tabInit () {
 		generateHashPanel();
 		tabs.addTab("Analysis on hash", hashPanel);
 		generateUserPanel();
@@ -43,6 +44,7 @@ public class TabPanes {
 		topPanel.add(tabs);
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void generateHashPanel () {
 		hashPanel = new JPanel();
 		hashPanel.setLayout(null);
@@ -51,7 +53,7 @@ public class TabPanes {
 		hashLabel.setBounds(40, 20, 70, 20);
 		hashPanel.add(hashLabel);
 		
-		JTextField hashComboBox = new JTextField("");
+		JComboBox hashComboBox = new JComboBox(hashComboExample);
 		hashComboBox.setBounds(140, 20, 140, 20);
 		hashPanel.add(hashComboBox);
 		
@@ -59,37 +61,35 @@ public class TabPanes {
 		searchHashButton.setBounds(110, 70, 100, 30);
 		hashPanel.add(searchHashButton);
 		
-		hashFileField = new JTextField();
-		hashFileField.setBounds(160, 172, 120, 20);
-		hashPanel.add(hashFileField); 
+		hashCsvFileField = new JTextField();
+		hashCsvFileField.setBounds(160, 172, 120, 20);
+		hashPanel.add(hashCsvFileField); 
 		
 		ButtonGroup group = new ButtonGroup();
 		
-		hashTweetAPI = new JRadioButton("Use Twitter API Database");
-		hashTweetAPI.setBounds(0, 120, 180, 40);
-		hashTweetAPI.addActionListener(new ActionListener() {
+		hashTweetAPIButton = new JRadioButton("Use Twitter API Database");
+		hashTweetAPIButton.setBounds(0, 120, 180, 40);
+		hashTweetAPIButton.addActionListener(new ActionListener() {
 			public void actionPerformed (ActionEvent ae) {
-				hashFileField.setText("");
-				hashFileField.setEnabled(false);
-				hashFileField.setBackground(Color.LIGHT_GRAY);
+				hashCsvFileField.setText("");
+				hashCsvFileField.disable();
+				hashCsvFileField.setBackground(Color.LIGHT_GRAY);
 			}
 		});
-		hashTweetAPI.doClick();
-		hashPanel.add(hashTweetAPI); 
+		hashTweetAPIButton.doClick();
+		hashPanel.add(hashTweetAPIButton); 
 		
-		hashCvsFile = new JRadioButton("Use cvs file Database");
-		hashCvsFile.setBounds(0, 160, 160, 40);
-		hashCvsFile.addActionListener(new ActionListener() {
+		hashCsvButton = new JRadioButton("Use cvs file Database");
+		hashCsvButton.setBounds(0, 160, 160, 40);
+		hashCsvButton.addActionListener(new ActionListener() {
 			public void actionPerformed (ActionEvent ae) {
-				hashFileField.setBackground(Color.white);
-				hashFileField.setEnabled(true);
+				hashCsvFileField.setBackground(Color.white);
+				hashCsvFileField.enable();
 			}
 		});
-		hashPanel.add(hashCvsFile);
+		hashPanel.add(hashCsvButton);
 		
-		group.add(hashTweetAPI); group.add(hashCvsFile);
-		
-
+		group.add(hashTweetAPIButton); group.add(hashCsvButton);
 	}
 	
 	private void generateUserPanel () {
@@ -109,35 +109,35 @@ public class TabPanes {
 		searchUserButton.setBounds(110, 70, 75, 30);
 		userPanel.add(searchUserButton);
 		
-		userFileField = new JTextField();
-		userFileField.setBounds(160, 172, 120, 20);
-		userPanel.add(userFileField); 
+		userCsvFileField = new JTextField();
+		userCsvFileField.setBounds(160, 172, 120, 20);
+		userPanel.add(userCsvFileField); 
 		
 		ButtonGroup group = new ButtonGroup();
 		
-		userTweetAPI = new JRadioButton("Use Twitter API Database");
-		userTweetAPI.setBounds(0, 120, 180, 40);
-		userTweetAPI.addActionListener(new ActionListener() {
+		userTweetAPIButton = new JRadioButton("Use Twitter API Database");
+		userTweetAPIButton.setBounds(0, 120, 180, 40);
+		userTweetAPIButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				userFileField.setText("");
-				userFileField.disable();
-				userFileField.setBackground(Color.LIGHT_GRAY);
+				userCsvFileField.setText("");
+				userCsvFileField.disable();
+				userCsvFileField.setBackground(Color.LIGHT_GRAY);
 			}
 		});
-		userTweetAPI.doClick();
-		userPanel.add(userTweetAPI); 
+		userTweetAPIButton.doClick();
+		userPanel.add(userTweetAPIButton); 
 		
-		userCvsFile = new JRadioButton("Use cvs file Database");
-		userCvsFile.setBounds(0, 160, 160, 40);
-		userCvsFile.addActionListener(new ActionListener() {
+		userCsvButton = new JRadioButton("Use cvs file Database");
+		userCsvButton.setBounds(0, 160, 160, 40);
+		userCsvButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				userFileField.setBackground(Color.white);
-				userFileField.enable();
+				userCsvFileField.setBackground(Color.white);
+				userCsvFileField.enable();
 			}
 		});
-		userPanel.add(userCvsFile); 
+		userPanel.add(userCsvButton); 
 		
-		group.add(userTweetAPI); group.add(userCvsFile);
+		group.add(userTweetAPIButton); group.add(userCsvButton);
 		
 
 		

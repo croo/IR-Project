@@ -27,7 +27,6 @@ public class GUI {
 		//mainPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		
 		tabPanes = new TabPanes (mainPanel);
-		tabPanes.tabInit();
 		
 		mainframe.getContentPane().add(mainPanel);
 

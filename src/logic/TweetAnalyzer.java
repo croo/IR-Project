@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.tumba.spell.SpellChecker;
 import twitter4j.Status;
 import database.sentimental.BoostWords;
 import database.sentimental.Emoticons;
@@ -22,11 +23,26 @@ public class TweetAnalyzer {
 	private BoostWords boostWords;
 	
 	public static int numberOfUnknownWords = 0;
+	private SpellChecker spellChecker;
 
 	public TweetAnalyzer(SentiWordNet sentiWordNet, Emoticons emoticons, BoostWords boostWords) {
 		this.sentiWordNet = sentiWordNet;
 		this.emoticons = emoticons;
 		this.boostWords = boostWords; // TODO: Not working yet, because the database isn't working yet.
+
+		initSpellChecker();
+	}
+
+	private void initSpellChecker() {
+		spellChecker = new SpellChecker();
+		String dictionary = "english_dict/english.txt";
+		String commonMisspells = "english_dict/common-misspells.txt";
+		try {
+			spellChecker.initialize(dictionary, commonMisspells);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("Initialization of the spellchecker failed with the following parameters:\n {}, {}, {}",dictionary,commonMisspells);
+		}
 	}
 
 	public Tweet getAnalyzedTweet(Status rawTweet) {
@@ -76,14 +92,23 @@ public class TweetAnalyzer {
 		} else if (emoticons.containsWord(word)) {
 			weight = emoticons.getWeight(word);
 		} else {
-			Word w = sanitizeAndSpellcheck(word);
-			if (emoticons.containsWord(w)) {
-				weight = emoticons.getWeight(w);
-			} else {
-				numberOfUnknownWords++;
-				noValueFound.add(word);
-				numberOfUnknownWords++;
-				noValueFound.add(w);
+			List<Word> fixedWords = sanitizeAndSpellcheck(word);
+			logFixedWords(word, fixedWords);
+			for (Word fixedWord : fixedWords) {
+				if(fixedWord.equals("happy")) {
+					System.out.println("FUK");
+				}
+				if (sentiWordNet.containsWord(fixedWord)) {
+					weight.add(sentiWordNet.getWeight(fixedWord));
+					log.warn("SUCCESS: spellcheck and sanitize solved the problem - {},{}",word.toString(),fixedWord.toString());
+				} else {
+					numberOfUnknownWords++;
+					noValueFound.add(word);
+					if(!word.equals(fixedWord)) {
+						numberOfUnknownWords++;
+						noValueFound.add(fixedWord);
+					}
+				}
 			}
 		}
 		word.setPositiveWeight(Utils.getAverage(weight.positive));
@@ -94,16 +119,48 @@ public class TweetAnalyzer {
 		log.trace(word + " : ( +{}; -{})",word.getPositiveBayesianWeight(),word.getNegativeBayesianWeight());
 	}
 
-	private Word sanitizeAndSpellcheck(Word word) {
+	private void logFixedWords(Word word, List<Word> fixedWords) {
+		StringBuilder wordList = new StringBuilder();
+		for (Word w : fixedWords) {
+			wordList.append(w).append(" ");
+		}
+		log.trace("Repaired '{}' to '{}'.",word.toString(), wordList.toString());
+	}
+
+	private List<Word> sanitizeAndSpellcheck(Word word) {
 		 return spellCheck(sanitize(word));
 	}
 
-	private Word spellCheck(Word sanitize) {
-		return sanitize;
+	private List<Word> spellCheck(Word sanitizedWord) {
+		String mostSimilarWords = spellChecker.findMostSimilar(sanitizedWord.toString());
+		List<Word> possibleWords = extractWords(mostSimilarWords);
+		logPossibleWords(sanitizedWord, possibleWords);
+		return possibleWords;
+	}
+
+	private void logPossibleWords(Word sanitizedWord, List<Word> possibleWords) {
+		log.info("After spellcheck:");
+		for (Word word : possibleWords) {
+			log.info("Found '{}' as most similar word to '{}' in dictionary.",word.toString(),sanitizedWord.toString());
+		}
+	}
+
+	private List<Word> extractWords(String mostSimilarWords) {
+		List<Word> result = new ArrayList<>();
+		if (mostSimilarWords != null) {
+			String[] words = mostSimilarWords.split(" ");
+			for (int i = 0; i < words.length; i++) {
+				Word w = new Word(words[i]);
+				result.add(w);
+			}
+		}
+		return result;
 	}
 
 	private Word sanitize(Word word) {
-		String sameCharacterMultipleTimes = "(.)(\\1)+";
+		String sameCharacterMultipleTimes = "(.)(\\1)(\\1)+";
+		String nonAlphabetCharacters = "[^a-zA-Z]";
+		word = new Word(word.toString().replaceAll(nonAlphabetCharacters,""));
 		word = new Word(word.toString().replaceAll(sameCharacterMultipleTimes,"$1"));
 		return word;
 	}
@@ -151,6 +208,13 @@ public class TweetAnalyzer {
  			filteredTweet.add(new Word(wordArray[i]));
 		}
  		return filteredTweet;
+	}
+
+	public Tweet getAnalyzedTweet(String text) {
+		log.info("Analyzing the following tweet: {}",text);
+
+		Tweet result = analyzeTweet(text);
+		return result;
 	}
 	
 }

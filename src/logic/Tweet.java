@@ -82,5 +82,9 @@ public class Tweet {
 		}
 		return out.toString();
 	}
+
+	public Double getConfidenceLevel() {
+		return Math.abs(getBayesianNegativeWeight() - getBayesianPositiveWeight());
+	}
 	
 }

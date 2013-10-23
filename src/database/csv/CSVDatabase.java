@@ -41,8 +41,8 @@ public class CSVDatabase implements Database {
 				String text = nextLine[2];
 				
 				if(name.contains(query) || text.contains(query)){
-					Date date = getDateFromString(dateString);
-					tweet.setDate(date);
+					//Date date = getDateFromString(dateString);
+					//tweet.setDate(date);
 					tweet.setUser(name);
 					tweet.setText(text);
 					tweets.add(tweet);

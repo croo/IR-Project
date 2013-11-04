@@ -28,8 +28,6 @@ public class TabPanes {
 	
 	protected JTabbedPane tabs;
 	protected JPanel hashPanel;
-	private String[] hashComboExample =  {"Hash1", "Sports", "Cake"};
-	
 	protected JPanel userPanel;
 	
 	protected JButton searchHashButton;

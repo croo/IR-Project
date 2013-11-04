@@ -1,6 +1,7 @@
 package main.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +33,7 @@ public class GUI {
 
 		mainframe = new JFrame(FRAME_DESCR);
 		mainframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainframe.setSize(300, 300);
-
+		mainframe.setSize(1366, 718);
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
 
@@ -46,7 +46,8 @@ public class GUI {
 		new TabPanes(mainPanel,analyzer);
 
 		mainframe.getContentPane().add(mainPanel);
-
+		
+		
 		mainframe.setLocationRelativeTo(null);
 		mainframe.setResizable(false);
 		mainframe.setVisible(true);

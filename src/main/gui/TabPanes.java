@@ -1,5 +1,7 @@
 package main.gui;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -90,11 +92,13 @@ public class TabPanes {
 		hashPanel.setLayout(null);
 		
 		JLabel hashLabel = new JLabel("#Hashtag");
-		hashLabel.setBounds(40, 20, 70, 20);
+		hashLabel.setFont(new Font(null, Font.PLAIN, 20));
+		hashLabel.setBounds(40, 20, 100, 30);
 		hashPanel.add(hashLabel);
 		
 		hashQueryField = new JTextField();
-		hashQueryField.setBounds(140, 20, 140, 20);
+		hashQueryField.setFont(new Font("Courier", Font.PLAIN, 20));
+		hashQueryField.setBounds(160, 25, 140, 25);
 		hashPanel.add(hashQueryField);
 	
 		searchHashButton = new JButton ("Search");

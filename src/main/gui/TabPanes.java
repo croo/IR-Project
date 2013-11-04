@@ -27,6 +27,7 @@ import database.twitter.TwitterAPIDatabase;
 @SuppressWarnings("deprecation")
 public class TabPanes {
 	protected JPanel topPanel;
+	protected JPanel botPanel;
 	
 	protected JTabbedPane tabs;
 	protected JPanel hashPanel;
@@ -47,8 +48,9 @@ public class TabPanes {
 	protected JTextField userCsvFileField;
 	
 	
-	public TabPanes (JPanel topPanel, TweetAnalyzer analyzer) {
+	public TabPanes (JPanel topPanel, JPanel botPanel, TweetAnalyzer analyzer) {
 		this.topPanel = topPanel;
+		this.botPanel = botPanel;
 		this.analyzer = analyzer;
 		tabs = new JTabbedPane();
 		tabInit();
@@ -81,6 +83,7 @@ public class TabPanes {
 					HashTag hashtag = new HashTag(query);
 					List<Tweet> analyzedTweets = analyzer.getAnalyzedTweets(tweets);
 					hashtag.addAll(analyzedTweets);
+					//New class where Peter's code should go
 					JOptionPane.showMessageDialog(null, "The query '" + query + "' have the following semantical value: \n +" + hashtag.getBayesianPositiveWeight() +"; -" + hashtag.getBayesianNegativeWeight());
 				}
 			}
@@ -92,27 +95,29 @@ public class TabPanes {
 		hashPanel.setLayout(null);
 		
 		JLabel hashLabel = new JLabel("#Hashtag");
-		hashLabel.setFont(new Font(null, Font.PLAIN, 20));
-		hashLabel.setBounds(40, 20, 100, 30);
+		hashLabel.setFont(new Font(null, Font.PLAIN, 18));
+		hashLabel.setBounds(60, 40, 100, 30);
 		hashPanel.add(hashLabel);
 		
 		hashQueryField = new JTextField();
-		hashQueryField.setFont(new Font("Courier", Font.PLAIN, 20));
-		hashQueryField.setBounds(160, 25, 140, 25);
+		hashQueryField.setFont(new Font("Courier", Font.PLAIN, 18));
+		hashQueryField.setBounds(180, 45, 160, 25);
 		hashPanel.add(hashQueryField);
 	
 		searchHashButton = new JButton ("Search");
-		searchHashButton.setBounds(110, 70, 100, 30);
+		searchHashButton.setFont(new Font(null, Font.PLAIN, 18));
+		searchHashButton.setBounds(313, 160, 100, 50);
 		hashPanel.add(searchHashButton);
 		
 		hashCsvFileField = new JTextField();
-		hashCsvFileField.setBounds(160, 172, 120, 20);
+		hashCsvFileField.setBounds(600, 60, 120, 25);
+		hashCsvFileField.setFont(new Font("Courier", Font.PLAIN, 18));
 		hashPanel.add(hashCsvFileField); 
 		
 		hashButtonGroup = new ButtonGroup();
 		
 		hashTweetAPIButton = new JRadioButton("Use Twitter API Database");
-		hashTweetAPIButton.setBounds(0, 120, 180, 40);
+		hashTweetAPIButton.setBounds(400, 20, 180, 40);
 		hashTweetAPIButton.addActionListener(new ActionListener() {
 			public void actionPerformed (ActionEvent ae) {
 				hashCsvFileField.setText("");
@@ -123,8 +128,8 @@ public class TabPanes {
 		hashTweetAPIButton.doClick();
 		hashPanel.add(hashTweetAPIButton); 
 		
-		hashCsvButton = new JRadioButton("Use cvs file Database");
-		hashCsvButton.setBounds(0, 160, 160, 40);
+		hashCsvButton = new JRadioButton("Use CSV file Database");
+		hashCsvButton.setBounds(400, 50, 160, 40);
 		hashCsvButton.addActionListener(new ActionListener() {
 			public void actionPerformed (ActionEvent ae) {
 				hashCsvFileField.setBackground(Color.white);

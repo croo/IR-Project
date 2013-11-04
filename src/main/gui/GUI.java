@@ -1,21 +1,17 @@
 package main.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Frame;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.Color;
+import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import logic.Tweet;
 import logic.TweetAnalyzer;
 
 import org.slf4j.impl.SimpleLogger;
 
-import twitter4j.Status;
-import database.Database;
-import database.csv.CSVDatabase;
 import database.sentimental.BoostWords;
 import database.sentimental.Emoticons;
 import database.sentimental.SentiWordNet;
@@ -26,6 +22,7 @@ public class GUI {
 
 	private static JFrame mainframe;
 	private static JPanel mainPanel;
+	private static JPanel botPanel;
 
 	public static void main(String[] args) {
 		System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "error");
@@ -33,9 +30,12 @@ public class GUI {
 
 		mainframe = new JFrame(FRAME_DESCR);
 		mainframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainframe.setSize(1366, 718);
+		mainframe.setSize(800, 600);
+		mainframe.setLayout(new GridLayout(2,1));
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
+		botPanel = new JPanel();
+		botPanel.setLayout(new BorderLayout());
 
 		SentiWordNet sentiWordNet = SentiWordNet.getInstance();
 		Emoticons emoticons = Emoticons.getInstance();
@@ -43,9 +43,11 @@ public class GUI {
 
 		TweetAnalyzer analyzer = new TweetAnalyzer(sentiWordNet, emoticons, boostWords);
 
-		new TabPanes(mainPanel,analyzer);
-
+		new TabPanes(mainPanel, botPanel, analyzer);
+		
 		mainframe.getContentPane().add(mainPanel);
+		//botPanel.setBorder(BorderFactory.createLineBorder(Color.green));
+		mainframe.getContentPane().add(botPanel);
 		
 		
 		mainframe.setLocationRelativeTo(null);

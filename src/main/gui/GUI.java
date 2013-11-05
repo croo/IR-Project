@@ -25,7 +25,7 @@ public class GUI {
 
 		mainframe = new JFrame(FRAME_DESCR);
 		mainframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainframe.setSize(600, 520);
+		mainframe.setSize(650, 520);
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
 

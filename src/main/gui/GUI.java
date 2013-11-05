@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -22,7 +23,6 @@ public class GUI {
 
 	private static JFrame mainframe;
 	private static JPanel mainPanel;
-	private static JPanel botPanel;
 
 	public static void main(String[] args) {
 		System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "error");
@@ -30,12 +30,9 @@ public class GUI {
 
 		mainframe = new JFrame(FRAME_DESCR);
 		mainframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainframe.setSize(800, 600);
-		mainframe.setLayout(new GridLayout(2,1));
+		mainframe.setSize(600, 520);
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
-		botPanel = new JPanel();
-		botPanel.setLayout(new BorderLayout());
 
 		SentiWordNet sentiWordNet = SentiWordNet.getInstance();
 		Emoticons emoticons = Emoticons.getInstance();
@@ -43,15 +40,11 @@ public class GUI {
 
 		TweetAnalyzer analyzer = new TweetAnalyzer(sentiWordNet, emoticons, boostWords);
 
-		new TabPanes(mainPanel, botPanel, analyzer);
+		new TabPanes(mainPanel, analyzer);
 		
 		mainframe.getContentPane().add(mainPanel);
-		//botPanel.setBorder(BorderFactory.createLineBorder(Color.green));
-		mainframe.getContentPane().add(botPanel);
-		
 		
 		mainframe.setLocationRelativeTo(null);
-		mainframe.setResizable(false);
 		mainframe.setVisible(true);
 	}
 }

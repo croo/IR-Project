@@ -1,6 +1,5 @@
 package main.gui;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,6 +7,7 @@ import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -27,31 +27,36 @@ import database.twitter.TwitterAPIDatabase;
 @SuppressWarnings("deprecation")
 public class TabPanes {
 	protected JPanel topPanel;
-	protected JPanel botPanel;
 	
 	protected JTabbedPane tabs;
 	protected JPanel hashPanel;
 	
-	
+	private final Font FONT = new Font("Courier", Font.PLAIN, 18);
+	//Hashtag tabpane
 	protected JButton searchHashButton;
 	protected JRadioButton hashTweetAPIButton, hashCsvButton;
-	protected JTextField hashCsvFileField;
-	private JTextField hashQueryField;
+	private ButtonGroup hashButtonGroup;
+	protected JTextField hashCsvFileField, hashQueryField;
 	private TweetAnalyzer analyzer;
+	private final String[] CLASSIFIER_DESCRIPTION = {"Simple Linear Classifier", "Naïve Bayes"};
+	protected JCheckBox[] classifier;
+	//Result tabpane
+	protected JPanel resultPanel;
+	protected JButton clearButton;
+	//Uncertain tabpane
 	
 	
-	protected JPanel userPanel;
+	/*protected JPanel userPanel;
 	protected JButton searchUserButton;
 	protected JRadioButton userTweetAPIButton, userCsvButton;
-	private ButtonGroup hashButtonGroup;
 	protected ButtonGroup userGroup;
-	protected JTextField userCsvFileField;
+	protected JTextField userCsvFileField;*/
 	
 	
-	public TabPanes (JPanel topPanel, JPanel botPanel, TweetAnalyzer analyzer) {
+	public TabPanes (JPanel topPanel, TweetAnalyzer analyzer) {
 		this.topPanel = topPanel;
-		this.botPanel = botPanel;
 		this.analyzer = analyzer;
+		classifier = new JCheckBox[CLASSIFIER_DESCRIPTION.length];
 		tabs = new JTabbedPane();
 		tabInit();
 	}
@@ -83,41 +88,57 @@ public class TabPanes {
 					HashTag hashtag = new HashTag(query);
 					List<Tweet> analyzedTweets = analyzer.getAnalyzedTweets(tweets);
 					hashtag.addAll(analyzedTweets);
+					generateResultPanel(query, hashtag.getBayesianPositiveWeight(), hashtag.getBayesianNegativeWeight());
+					tabs.setSelectedIndex(1);
+					tabs.setEnabledAt(0, false);
 					//New class where Peter's code should go
-					JOptionPane.showMessageDialog(null, "The query '" + query + "' have the following semantical value: \n +" + hashtag.getBayesianPositiveWeight() +"; -" + hashtag.getBayesianNegativeWeight());
+					//JOptionPane.showMessageDialog(null, "The query '" + query + "' have the following semantical value: \n +" + hashtag.getBayesianPositiveWeight() +"; -" + hashtag.getBayesianNegativeWeight());
 				}
 			}
 		});
+		
+		
 	}
 	
 	private void generateHashPanel () {
 		hashPanel = new JPanel();
 		hashPanel.setLayout(null);
 		
-		JLabel hashLabel = new JLabel("#Hashtag");
-		hashLabel.setFont(new Font(null, Font.PLAIN, 18));
-		hashLabel.setBounds(60, 40, 100, 30);
+		JLabel hashLabel = new JLabel("#Hashtag or term");
+		hashLabel.setFont(FONT);
+		hashLabel.setBounds(25, 25, 180, 30);
 		hashPanel.add(hashLabel);
 		
 		hashQueryField = new JTextField();
-		hashQueryField.setFont(new Font("Courier", Font.PLAIN, 18));
-		hashQueryField.setBounds(180, 45, 160, 25);
+		hashQueryField.setFont(FONT);
+		hashQueryField.setBounds(330, 30, 180, 25);
 		hashPanel.add(hashQueryField);
-	
-		searchHashButton = new JButton ("Search");
-		searchHashButton.setFont(new Font(null, Font.PLAIN, 18));
-		searchHashButton.setBounds(313, 160, 100, 50);
-		hashPanel.add(searchHashButton);
+		
+		JLabel databaseLabel = new JLabel("DATABASE SELECTION");
+		databaseLabel.setFont(FONT);
+		databaseLabel.setBounds(30, 85, 230, 30);
+		hashPanel.add(databaseLabel);
 		
 		hashCsvFileField = new JTextField();
-		hashCsvFileField.setBounds(600, 60, 120, 25);
-		hashCsvFileField.setFont(new Font("Courier", Font.PLAIN, 18));
+		hashCsvFileField.setBounds(330, 140, 180, 25);
+		hashCsvFileField.setFont(FONT);
 		hashPanel.add(hashCsvFileField); 
 		
 		hashButtonGroup = new ButtonGroup();
 		
+		hashCsvButton = new JRadioButton("Use CSV file Database");
+		hashCsvButton.setBounds(20, 130, 280, 40);
+		hashCsvButton.setFont(FONT);
+		hashCsvButton.addActionListener(new ActionListener() {
+			public void actionPerformed (ActionEvent ae) {
+				hashCsvFileField.setBackground(Color.white);
+				hashCsvFileField.enable();
+			}
+		});
+		
 		hashTweetAPIButton = new JRadioButton("Use Twitter API Database");
-		hashTweetAPIButton.setBounds(400, 20, 180, 40);
+		hashTweetAPIButton.setBounds(20, 175, 300, 40);
+		hashTweetAPIButton.setFont(FONT);
 		hashTweetAPIButton.addActionListener(new ActionListener() {
 			public void actionPerformed (ActionEvent ae) {
 				hashCsvFileField.setText("");
@@ -128,17 +149,40 @@ public class TabPanes {
 		hashTweetAPIButton.doClick();
 		hashPanel.add(hashTweetAPIButton); 
 		
-		hashCsvButton = new JRadioButton("Use CSV file Database");
-		hashCsvButton.setBounds(400, 50, 160, 40);
-		hashCsvButton.addActionListener(new ActionListener() {
-			public void actionPerformed (ActionEvent ae) {
-				hashCsvFileField.setBackground(Color.white);
-				hashCsvFileField.enable();
+		hashPanel.add(hashCsvButton);
+		hashButtonGroup.add(hashTweetAPIButton); hashButtonGroup.add(hashCsvButton);
+		
+		for(int i = 0; i < classifier.length; i++) {
+			classifier[i] = new JCheckBox(CLASSIFIER_DESCRIPTION[i]);
+			classifier[i].setFont(FONT);
+			classifier[i].setBounds(20, 270+(40*i), 400, 30);
+			hashPanel.add(classifier[i]);
+		}
+		
+		searchHashButton = new JButton ("Search");
+		searchHashButton.setFont(FONT);
+		searchHashButton.setBounds(230, 380, 100, 40);
+		hashPanel.add(searchHashButton);
+		
+	}
+	
+	private void generateResultPanel(String query, double positive, double negative) {
+		resultPanel = new JPanel();
+		
+		JLabel resultLabel = new JLabel("Result for '"+query+"' is +"+positive+" -"+negative);
+		resultLabel.setFont(new Font("Courier", Font.PLAIN, 18));
+		resultPanel.add(resultLabel);
+		
+		clearButton = new JButton ("Clear");
+		clearButton.setFont(FONT);
+		clearButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				tabs.setEnabledAt(0, true);
+				tabs.remove(1);
 			}
 		});
-		hashPanel.add(hashCsvButton);
-		
-		hashButtonGroup.add(hashTweetAPIButton); hashButtonGroup.add(hashCsvButton);
+		resultPanel.add(clearButton);
+		tabs.addTab("Result for "+query.toUpperCase(), resultPanel);
 	}
 	
 /*	private void generateUserPanel () {

@@ -56,7 +56,7 @@ public class Tokenizer {
 	}
 	
 	private static void logCleanTweet(List<Word> words) {
-		Tweet tweet = new Tweet("");
+		Tweet tweet = new Tweet();
 		tweet.setWords(words);
 		log.info("filtered tweet: {}", tweet.toString());
 	}

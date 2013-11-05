@@ -15,15 +15,12 @@ public class TwitterAPIDatabase implements Database{
 
 	private Query query;
 	
-	private UsernameFinder userFinder;
-
 	public TwitterAPIDatabase() {
 		query = new Query();
 		query.setCount(100);
 		query.setLang("en");
 		query.setResultType(Query.MIXED);
 		
-		userFinder = new UsernameFinder(this);
 	}
 	
 	public void setQuery(Query query) {

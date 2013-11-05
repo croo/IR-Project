@@ -87,8 +87,7 @@ public class TabPanes {
 						List<Tweet> analyzedTweets = analyzer.getAnalyzedTweets(tweets);
 						hashtag.addAll(analyzedTweets);
 						generateResultPanel(query, hashtag.getBayesianPositiveWeight(), hashtag.getBayesianNegativeWeight());
-						tabs.setSelectedIndex(1);
-						tabs.setEnabledAt(0, false);
+						tabs.setSelectedIndex(tabs.getTabCount()-1);
 					} else
 						JOptionPane.showMessageDialog(null, "Select at least one CLASSIFIER SELECTION");
 				}
@@ -107,14 +106,12 @@ public class TabPanes {
 		
 		hashQueryField = new JTextField();
 		hashQueryField.setFont(FONT);
-		hashQueryField.setBounds(330, 30, 210, 25);
+		hashQueryField.setBounds(320, 30, 300, 25);
 		hashQueryField.addKeyListener(new KeyListener() {
 			public void keyPressed(KeyEvent arg0) { }
 			public void keyReleased(KeyEvent arg0) {
 				if(hashQueryField.getText().length() >= 20)
 					hashQueryField.setText(hashQueryField.getText().substring(0, 20));
-				if(hashQueryField.getText().contains(" "))
-					hashQueryField.setText(hashQueryField.getText().replace(" ", ""));;
 			}
 			public void keyTyped(KeyEvent arg0) { }
 			
@@ -127,15 +124,13 @@ public class TabPanes {
 		hashPanel.add(databaseLabel);
 		
 		hashCsvFileField = new JTextField();
-		hashCsvFileField.setBounds(330, 130, 180, 25);
+		hashCsvFileField.setBounds(320, 130, 300, 25);
 		hashCsvFileField.setFont(FONT);
 		hashCsvFileField.addKeyListener(new KeyListener() {
 			public void keyPressed(KeyEvent arg0) { }
 			public void keyReleased(KeyEvent arg0) {
-				if(hashCsvFileField.getText().length() >= 20)
-					hashCsvFileField.setText(hashCsvFileField.getText().substring(0, 20));
-				if(hashCsvFileField.getText().contains(" "))
-					hashCsvFileField.setText(hashCsvFileField.getText().replace(" ", ""));;
+				if(hashCsvFileField.getText().length() >= 25)
+					hashCsvFileField.setText(hashCsvFileField.getText().substring(0, 25));
 			}
 			public void keyTyped(KeyEvent arg0) { }
 			
@@ -208,13 +203,13 @@ public class TabPanes {
 		JLabel pos = new JLabel("+"+Math.round(100*positive)+"%");
 		pos.setFont(FONT); 
 		pos.setForeground(Color.green);
-		pos.setBounds(440, 10, 60, 30);
+		pos.setBounds(500, 10, 60, 30);
 		resultPanel.add(pos);		
 		
 		JLabel neg = new JLabel("-"+Math.round(100*negative)+"%");
 		neg.setFont(FONT); 
 		neg.setForeground(Color.red);
-		neg.setBounds(510, 10, 60, 30);
+		neg.setBounds(560, 10, 60, 30);
 		resultPanel.add(neg);
 		
 		if(posValue == negValue && posValue == 0) {
@@ -225,7 +220,7 @@ public class TabPanes {
 		} else {
 			JButton histogramButton = new JButton("Histogram");
 			histogramButton.setFont(new Font("Courier", Font.PLAIN, 15));
-			histogramButton.setBounds(430, 50, 150, 40);
+			histogramButton.setBounds(480, 50, 140, 40);
 			resultPanel.add(histogramButton);
 			histogramButton.addActionListener(new ActionListener () {
 				public void actionPerformed(ActionEvent ae) {
@@ -239,7 +234,7 @@ public class TabPanes {
 		
 		clearButton = new JButton ("Clear");
 		clearButton.setFont(FONT);
-		clearButton.setBounds(230, 380, 100, 40);
+		clearButton.setBounds(230, 410, 100, 40);
 		resultPanel.add(clearButton);
 		clearButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
@@ -248,7 +243,7 @@ public class TabPanes {
 				for(JCheckBox box: classifier)
 					box.setSelected(false);
 				tabs.setEnabledAt(0, true);
-				tabs.remove(1);
+				tabs.remove(tabs.getSelectedIndex());
 			}
 		});
 		

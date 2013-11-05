@@ -1,11 +1,6 @@
 package main.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -40,10 +35,10 @@ public class GUI {
 
 		TweetAnalyzer analyzer = new TweetAnalyzer(sentiWordNet, emoticons, boostWords);
 
-		new TabPanes(mainPanel, analyzer);
+		new TabPanes(mainframe, mainPanel, analyzer);
 		
 		mainframe.getContentPane().add(mainPanel);
-		
+		mainframe.setResizable(false);
 		mainframe.setLocationRelativeTo(null);
 		mainframe.setVisible(true);
 	}

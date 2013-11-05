@@ -26,6 +26,7 @@ public class CommandLineTool {
 		 
 		 	System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "error");
 		 	System.setProperty(org.slf4j.impl.SimpleLogger.LOG_FILE_KEY, "System.out");
+		 	System.setProperty(org.slf4j.impl.SimpleLogger.SHOW_SHORT_LOG_NAME_KEY, "true");
 		 	
 		 	String hashTagQuery = "#happy";
 		 	String csvDatabaseFile = "happy.txt";
@@ -41,7 +42,7 @@ public class CommandLineTool {
 		 	SentiWordNet sentiWordNet = SentiWordNet.getInstance();
 		 	Emoticons emoticons = Emoticons.getInstance();
 		 	BoostWords boostWords = BoostWords.getInstance();
-		 	pt.tumba.spell.SpellChecker spellChecker = SpellChecker.getInstance();
+		 	SpellChecker spellChecker = SpellChecker.getInstance();
 		 	
 		 	SimpleLinearAnalyzer analyzer = new SimpleLinearAnalyzer(sentiWordNet,emoticons,boostWords,spellChecker);
 		 	

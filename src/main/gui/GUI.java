@@ -34,7 +34,7 @@ public class GUI {
 		SentiWordNet sentiWordNet = SentiWordNet.getInstance();
 		Emoticons emoticons = Emoticons.getInstance();
 		BoostWords boostWords = BoostWords.getInstance();
-	 	pt.tumba.spell.SpellChecker spellChecker = SpellChecker.getInstance();
+	 	SpellChecker spellChecker = SpellChecker.getInstance();
 
 
 		SimpleLinearAnalyzer analyzer = new SimpleLinearAnalyzer(sentiWordNet, emoticons, boostWords, spellChecker);

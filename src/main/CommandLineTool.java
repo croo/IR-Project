@@ -9,9 +9,9 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import logic.SimpleLinearAnalyzer;
 import logic.SpellChecker;
 import logic.Tweet;
+import logic.simplelinear.SimpleLinearAnalyzer;
 import twitter4j.Status;
 import database.Database;
 import database.csv.CSVDatabase;

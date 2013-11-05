@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 
 import logic.HashTag;
 import logic.Tweet;
-import logic.SimpleLinearAnalyzer;
+import logic.simplelinear.SimpleLinearAnalyzer;
 import twitter4j.Status;
 import database.Database;
 import database.csv.CSVDatabase;

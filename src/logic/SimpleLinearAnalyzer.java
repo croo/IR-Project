@@ -42,7 +42,7 @@ public class SimpleLinearAnalyzer {
 	}
 
 	private Tweet analyzeTweet(String text) {
-		Tweet result = new Tweet(text);
+		Tweet result = new Tweet();
 		List<Word> words = Tokenizer.getTokens(text);
 		
 		List<Word> noValueFound = new ArrayList<>();
@@ -97,7 +97,7 @@ public class SimpleLinearAnalyzer {
 		
 		postprocessBonuses(word);
 		//System.out.println(""+word +"\t" + word.getPositiveBayesianWeight() + "\t" + word.getNegativeBayesianWeight());
-		log.trace(word + " : ( +{}; -{})",word.getPositiveBayesianWeight(),word.getNegativeBayesianWeight());
+		log.trace(word + " : ( +{}; -{})",word.getPositiveNormalizedWeight(),word.getNegativeNormalizedWeight());
 	}
 
 	private void logFixedWords(Word word, List<Word> fixedWords) {
@@ -110,13 +110,13 @@ public class SimpleLinearAnalyzer {
 
 	private void postprocessBonuses(Word word) {
 		if(isUpperCase(word)) {
-			word.setPositiveWeight(word.getPositiveBayesianWeight()*UPPERCASE_BONUS);
-			word.setNegativeWeight(word.getNegativeBayesianWeight()*UPPERCASE_BONUS);
+			word.setPositiveWeight(word.getPositiveNormalizedWeight()*UPPERCASE_BONUS);
+			word.setNegativeWeight(word.getNegativeNormalizedWeight()*UPPERCASE_BONUS);
 		}
 		
 		if(haveExclamationMark(word)) {
-			word.setPositiveWeight(word.getPositiveBayesianWeight()*EXCLAMATION_BONUS);
-			word.setNegativeWeight(word.getNegativeBayesianWeight()*EXCLAMATION_BONUS);
+			word.setPositiveWeight(word.getPositiveNormalizedWeight()*EXCLAMATION_BONUS);
+			word.setNegativeWeight(word.getNegativeNormalizedWeight()*EXCLAMATION_BONUS);
 		}
 	}
 	

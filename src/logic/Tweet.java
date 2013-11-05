@@ -13,17 +13,10 @@ public class Tweet {
 	
 	Logger log = LoggerFactory.getLogger(Tweet.class);
 	
-	private List<Word> words = new ArrayList<>();
-	private String originalText;
-
 	private Status rawTweet;
-
+	private List<Word> words = new ArrayList<>();
 	private Classification classification;
 
-	public Tweet(String text){
-		this.originalText = text;
-	}
-	
 	public void setWords(List<Word> cleanTweet) {
 		this.words = cleanTweet;
 	}
@@ -31,7 +24,7 @@ public class Tweet {
 	public Double getAveragePositiveWeight() {
 		List<Double> weights = new ArrayList<Double>();
 		for (Word w : words) {
-			weights.add(w.getPositiveBayesianWeight());
+			weights.add(w.getPositiveNormalizedWeight());
 		}
 		return Utils.getAverage(weights);
 	}
@@ -39,13 +32,9 @@ public class Tweet {
 	public Double getAverageNegativeWeight() {
 		List<Double> weights = new ArrayList<Double>();
 		for (Word w : words) {
-			weights.add(w.getNegativeBayesianWeight());
+			weights.add(w.getNegativeNormalizedWeight());
 		}
 		return Utils.getAverage(weights);
-	}
-	
-	public String getOriginalText() {
-		return originalText;
 	}
 	
 	/**

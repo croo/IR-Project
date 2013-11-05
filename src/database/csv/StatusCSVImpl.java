@@ -2,6 +2,7 @@ package database.csv;
 
 import java.util.Date;
 
+import logic.Classification;
 import twitter4j.GeoLocation;
 import twitter4j.HashtagEntity;
 import twitter4j.MediaEntity;
@@ -18,6 +19,7 @@ public class StatusCSVImpl implements Status {
 	private Date createdAt;
 	private String text;
 	private User user;
+	private Classification label;
 
 	@Override
 	public int compareTo(Status o) {
@@ -181,6 +183,14 @@ public class StatusCSVImpl implements Status {
 	public MediaEntity[] getMediaEntities() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public Classification getLabel() {
+		return label;
+	}
+
+	public void setLabel(Classification label) {
+		this.label = label;
 	}
 
 

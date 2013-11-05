@@ -13,9 +13,9 @@ import database.sentimental.Emoticons;
 import database.sentimental.SentiWordNet;
 import database.sentimental.Weight;
 
-public class TweetAnalyzer {
+public class SimpleLinearAnalyzer {
 
-	Logger log = LoggerFactory.getLogger(TweetAnalyzer.class);
+	Logger log = LoggerFactory.getLogger(SimpleLinearAnalyzer.class);
 	private static final double UPPERCASE_BONUS = 1.1;
 	private static final double EXCLAMATION_BONUS = 1.1;
 	private SentiWordNet sentiWordNet;
@@ -25,26 +25,11 @@ public class TweetAnalyzer {
 	public static int numberOfUnknownWords = 0;
 	private SpellChecker spellChecker;
 
-	public TweetAnalyzer(SentiWordNet sentiWordNet, Emoticons emoticons, BoostWords boostWords) {
+	public SimpleLinearAnalyzer(SentiWordNet sentiWordNet, Emoticons emoticons, BoostWords boostWords,SpellChecker spellChecker) {
 		this.sentiWordNet = sentiWordNet;
 		this.emoticons = emoticons;
 		this.boostWords = boostWords; // TODO: Not working yet, because the database isn't working yet.
-
-		initSpellChecker();
-	}
-
-	private void initSpellChecker() {
-		System.out.println("Initializing JaSpell checker...");
-		spellChecker = new SpellChecker();
-		String dictionary = "english_dict/english.txt";
-		String commonMisspells = "english_dict/common-misspells.txt";
-		try {
-			spellChecker.initialize(dictionary, commonMisspells);
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.error("Initialization of the spellchecker failed with the following parameters:\n {}, {}, {}",dictionary,commonMisspells);
-		}
-		System.out.println("Done.");
+		this.spellChecker = spellChecker;
 	}
 
 	public Tweet getAnalyzedTweet(Status rawTweet) {
@@ -53,6 +38,7 @@ public class TweetAnalyzer {
 		log.info("Analyzing the following tweet: {}",text);
 
 		Tweet result = analyzeTweet(text);
+		result.setRawTweet(rawTweet);
 		return result;
 	}
 

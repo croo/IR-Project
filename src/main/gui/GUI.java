@@ -1,10 +1,12 @@
 package main.gui;
 
 import java.awt.BorderLayout;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import logic.TweetAnalyzer;
+import logic.SimpleLinearAnalyzer;
+import logic.SpellChecker;
 
 import org.slf4j.impl.SimpleLogger;
 
@@ -32,8 +34,10 @@ public class GUI {
 		SentiWordNet sentiWordNet = SentiWordNet.getInstance();
 		Emoticons emoticons = Emoticons.getInstance();
 		BoostWords boostWords = BoostWords.getInstance();
+	 	pt.tumba.spell.SpellChecker spellChecker = SpellChecker.getInstance();
 
-		TweetAnalyzer analyzer = new TweetAnalyzer(sentiWordNet, emoticons, boostWords);
+
+		SimpleLinearAnalyzer analyzer = new SimpleLinearAnalyzer(sentiWordNet, emoticons, boostWords, spellChecker);
 
 		new TabPanes(mainframe, mainPanel, analyzer);
 		

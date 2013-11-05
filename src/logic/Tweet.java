@@ -6,6 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import twitter4j.Status;
+
 
 public class Tweet {
 	
@@ -13,6 +15,10 @@ public class Tweet {
 	
 	private List<Word> words = new ArrayList<>();
 	private String originalText;
+
+	private Status rawTweet;
+
+	private Classification classification;
 
 	public Tweet(String text){
 		this.originalText = text;
@@ -71,7 +77,14 @@ public class Tweet {
 		}else {
 			return avgNegWeight / (avgNegWeight + avgPosWeight); 
 		}
-		
+	}
+	
+	public void setClassification(Classification c)	{
+		this.classification = c;
+	}
+	
+	public Classification getClassification() {
+		return classification;
 	}
 	
 	@Override
@@ -85,6 +98,14 @@ public class Tweet {
 
 	public Double getConfidenceLevel() {
 		return Math.abs(getBayesianNegativeWeight() - getBayesianPositiveWeight());
+	}
+
+	public void setRawTweet(Status rawTweet) {
+		this.rawTweet = rawTweet;
+	}
+	
+	public Status getRawTweet() {
+		return rawTweet;
 	}
 	
 }

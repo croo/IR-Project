@@ -25,6 +25,10 @@ import java.util.Map;
 public class Utils
 {
     
+	public static List<String> readAllLines(String filename) {
+		return readAllLines(filename,Charset.forName("UTF-8"));
+	}
+	
     public static List<String> readAllLines(String filename, Charset charset){  
     	try {
 	        Path file = Paths.get(filename);  

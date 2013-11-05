@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 
 import logic.HashTag;
 import logic.Tweet;
-import logic.TweetAnalyzer;
+import logic.SimpleLinearAnalyzer;
 import twitter4j.Status;
 import database.Database;
 import database.csv.CSVDatabase;
@@ -40,8 +40,9 @@ public class TabPanes {
 	protected JButton searchHashButton;
 	protected JRadioButton hashTweetAPIButton, hashCsvButton;
 	private ButtonGroup hashButtonGroup;
+
 	protected JTextField hashCsvFileField, hashQueryField;
-	private TweetAnalyzer analyzer;
+	private SimpleLinearAnalyzer analyzer;
 	private final String[] CLASSIFIER_DESCRIPTION = {" Simple Linear Classifier", " Naïve Bayes"};
 	protected JCheckBox[] classifier;
 	//Result tabpane
@@ -49,7 +50,7 @@ public class TabPanes {
 	protected JButton clearButton;
 	
 	
-	public TabPanes (JFrame mainFrame, JPanel topPanel, TweetAnalyzer analyzer) {
+	public TabPanes (JFrame mainFrame, JPanel topPanel, SimpleLinearAnalyzer analyzer) {
 		this.mainFrame = mainFrame;
 		this.topPanel = topPanel;
 		this.analyzer = analyzer;

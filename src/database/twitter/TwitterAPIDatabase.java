@@ -67,9 +67,4 @@ public class TwitterAPIDatabase implements Database{
           .setOAuthAccessTokenSecret("S9hLN3ogFG9LQX7sq41pvdWotTDYmu9L5WpbSQTl7y0");
 	}
 
-	@Override
-	public List<String> getUsers(String namePrefix) {
-		return userFinder.getUser(namePrefix);
-	}
-
 }

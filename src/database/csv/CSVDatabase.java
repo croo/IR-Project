@@ -19,12 +19,9 @@ public class CSVDatabase implements Database {
 
 	private Logger log = LoggerFactory.getLogger(SimpleLinearAnalyzer.class);
 	
-	private String fileName;
 	private List<String> csvLines;
 
-	
 	public CSVDatabase(String fileName) {
-		this.fileName = fileName;
 		csvLines = Utils.readAllLines(fileName);
 	}
 
@@ -47,7 +44,7 @@ public class CSVDatabase implements Database {
 		
 		return result;
 	}
-
+	
 	private Date getParsedDate(String date) {
 		try {
 			return new SimpleDateFormat("\"yyyy-dd-MM H:m:s:S\"").parse(date);
@@ -58,9 +55,4 @@ public class CSVDatabase implements Database {
 		return null;
 	}
 
-	@Override
-	public List<String> getUsers(String namePrefix) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

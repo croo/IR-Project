@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import logic.Classification;
+import logic.Classifier;
 import logic.SpellChecker;
 import logic.Tokenizer;
 import logic.Tweet;
@@ -19,7 +20,7 @@ import database.sentimental.Emoticons;
 import database.sentimental.SentiWordNet;
 import database.sentimental.Weight;
 
-public class SimpleLinearAnalyzer {
+public class SimpleLinearAnalyzer implements Classifier {
 
 	Logger log = LoggerFactory.getLogger(SimpleLinearAnalyzer.class);
 	private static final double UPPERCASE_BONUS = 1.1;
@@ -38,6 +39,7 @@ public class SimpleLinearAnalyzer {
 		this.spellChecker = spellChecker;
 	}
 
+	@Override
 	public Tweet getAnalyzedTweet(Status rawTweet) {
 		String text = rawTweet.getText();
 

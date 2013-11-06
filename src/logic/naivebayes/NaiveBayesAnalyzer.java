@@ -3,6 +3,7 @@ package logic.naivebayes;
 import java.util.List;
 
 import logic.Classification;
+import logic.Classifier;
 import logic.Tokenizer;
 import logic.Tweet;
 import logic.Word;
@@ -13,13 +14,14 @@ import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 
 
-public class NaiveBayesAnalyzer {
+public class NaiveBayesAnalyzer implements Classifier{
 	
 	Logger log = LoggerFactory.getLogger(NaiveBayesAnalyzer.class);
 
 	private TrainingDataset trainingSet = new TrainingDataset("training_data/merged_tabbed_training_data.csv");
 	
-	public Tweet getTAnalyzedTweet(Status rawTweet) {
+	@Override
+	public Tweet getAnalyzedTweet(Status rawTweet) {
 		String text = rawTweet.getText();
 		
 		log.info("Analyzing the following tweet: {}",text);

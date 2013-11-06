@@ -1,6 +1,5 @@
 package logic;
 
-import database.sentimental.SentiWordNet;
 
 
 /**
@@ -17,6 +16,9 @@ public class Word {
 	private String word;
 	private Double positiveWeight; 
 	private Double negativeWeight;
+	
+	private Double bayesianPositiveWeight;
+	private Double bayesianNegativeWeight;
 
 	public Word(String word) {
 		this.word = word;
@@ -74,5 +76,21 @@ public class Word {
 		} else if (!word.equals(other.word))
 			return false;
 		return true;
+	}
+
+	public Double getBayesianPositiveWeight() {
+		return bayesianPositiveWeight;
+	}
+
+	public void setBayesianPositiveWeight(Double bayesianPositiveWeight) {
+		this.bayesianPositiveWeight = bayesianPositiveWeight;
+	}
+
+	public Double getBayesianNegativeWeight() {
+		return bayesianNegativeWeight;
+	}
+
+	public void setBayesianNegativeWeight(Double bayesianNegativeWeight) {
+		this.bayesianNegativeWeight = bayesianNegativeWeight;
 	}
 }

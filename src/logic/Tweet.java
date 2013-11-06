@@ -17,11 +17,14 @@ public class Tweet {
 	private List<Word> words = new ArrayList<>();
 	private Classification classification;
 
+	private Double naiveBayesPositiveProbability;
+	private Double naiveBayesNegativeProbability;
+
 	public void setWords(List<Word> cleanTweet) {
 		this.words = cleanTweet;
 	}
 
-	public Double getAveragePositiveWeight() {
+	private Double getAveragePositiveWeight() {
 		List<Double> weights = new ArrayList<Double>();
 		for (Word w : words) {
 			weights.add(w.getPositiveNormalizedWeight());
@@ -29,7 +32,7 @@ public class Tweet {
 		return Utils.getAverage(weights);
 	}
 
-	public Double getAverageNegativeWeight() {
+	private Double getAverageNegativeWeight() {
 		List<Double> weights = new ArrayList<Double>();
 		for (Word w : words) {
 			weights.add(w.getNegativeNormalizedWeight());
@@ -37,16 +40,7 @@ public class Tweet {
 		return Utils.getAverage(weights);
 	}
 	
-	/**
-	 * tweet=    sad    happy cake. 
-	   negative  0.625  0.125 0.05 = 0.2666
-	   positive  0.0    0.75  0.45 = (0.0 + 0.75 + 0.45) / 3 = avg 0.4 
-	
-		P( tweet | positive )  = 0.4 / { 0.4 +  0.2666} = 0.6
-		P( tweet | negative ) = (1 - P(t | +) ) = 1 - 0.6 = 0.4
-	 * @return
-	 */
-	public Double getBayesianPositiveWeight() {
+	public Double getNormalizedPositiveWeight() {
 		Double avgPosWeight = getAveragePositiveWeight();
 		Double avgNegWeight = getAverageNegativeWeight();
 		if((avgPosWeight + avgNegWeight) == 0.0) {
@@ -57,7 +51,7 @@ public class Tweet {
 		}
 	}
 	
-	public Double getBayesianNegativeWeight() {
+	public Double getNormalizedNegativeWeight() {
 		Double avgPosWeight = getAveragePositiveWeight();
 		Double avgNegWeight = getAverageNegativeWeight();
 		if((avgPosWeight + avgNegWeight) == 0.0) {
@@ -85,10 +79,6 @@ public class Tweet {
 		return out.toString();
 	}
 
-	public Double getConfidenceLevel() {
-		return Math.abs(getBayesianNegativeWeight() - getBayesianPositiveWeight());
-	}
-
 	public void setRawTweet(Status rawTweet) {
 		this.rawTweet = rawTweet;
 	}
@@ -96,5 +86,20 @@ public class Tweet {
 	public Status getRawTweet() {
 		return rawTweet;
 	}
+
+	public void setNaiveBayesPositiveProbability(Double probability) {
+		this.naiveBayesPositiveProbability = probability;
+	}
 	
+	public Double getNaiveBayesPositiveProbability() {
+		return naiveBayesPositiveProbability;
+	}
+	
+	public void setNaiveBayesNegativeProbability(Double probability) {
+		this.naiveBayesNegativeProbability = probability;
+	}
+	
+	public Double getNaiveBayesNegativeProbability() {
+		return naiveBayesNegativeProbability;
+	}
 }

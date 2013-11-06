@@ -3,6 +3,7 @@ package logic.simplelinear;
 import java.util.ArrayList;
 import java.util.List;
 
+import logic.Classification;
 import logic.SpellChecker;
 import logic.Tokenizer;
 import logic.Tweet;
@@ -43,6 +44,8 @@ public class SimpleLinearAnalyzer {
 		log.info("Analyzing the following tweet: {}",text);
 
 		Tweet result = analyzeTweet(text);
+		result.setClassification(result.getNormalizedPositiveWeight() > result.getNormalizedNegativeWeight() ? 
+				Classification.POSITIVE : Classification.NEGATIVE);
 		result.setRawTweet(rawTweet);
 		return result;
 	}

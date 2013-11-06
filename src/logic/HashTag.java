@@ -21,7 +21,7 @@ public class HashTag {
 	public Double getAveragePositiveWeight() {
 		List<Double> weights = new ArrayList<Double>();
 		for (Tweet t : tweets) {
-			weights.add(t.getBayesianPositiveWeight());
+			weights.add(t.getNormalizedPositiveWeight());
 		}
 		return Utils.getAverage(weights);
 	}
@@ -29,7 +29,7 @@ public class HashTag {
 	public Double getAverageNegativeWeight() {
 		List<Double> weights = new ArrayList<Double>();
 		for (Tweet t : tweets) {
-			weights.add(t.getBayesianNegativeWeight());
+			weights.add(t.getNormalizedNegativeWeight());
 		}
 		return Utils.getAverage(weights);
 	}

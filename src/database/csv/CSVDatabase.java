@@ -45,9 +45,7 @@ public class CSVDatabase implements Database {
 			String label = row[LABEL_COLUMN];
 			String text = row[TEXT_COLUMN];
 			
-			if(query.isEmpty() || query == null) {
-				return result;
-			} else if(text.contains(query)) {
+			if(text.contains(query)) {
 				StatusCSVImpl tweet = createTweet(date, name, label, text);
 				result.add(tweet);
 			}
@@ -76,7 +74,7 @@ public class CSVDatabase implements Database {
 		StatusCSVImpl tweet = new StatusCSVImpl();
 		tweet.setUser(name);
 		tweet.setText(text);
-		tweet.setLabel(label == "1" ? Classification.POSITIVE : Classification.NEGATIVE);
+		tweet.setLabel(label.equals("1") ? Classification.POSITIVE : Classification.NEGATIVE);
 		tweet.setDate(getParsedDate(date));
 		return tweet;
 	}

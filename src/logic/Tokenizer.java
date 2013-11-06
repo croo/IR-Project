@@ -47,21 +47,33 @@ public class Tokenizer {
  		tweet = tweet.replaceAll("\"", " ");
  		tweet = tweet.replaceAll(multipleSpaces," ");
  		
- 		String[] wordArray = tweet.split(" ");
+ 		String[] wordArray = tweet.trim().split(" ");
  		for (int i = 0; i < wordArray.length; i++) {
  			filteredTweet.add(new Word(wordArray[i]));
 		}
+ 		
+ 		filteredTweet = removeStopWords(filteredTweet);
+ 		deleteEmptyWords(filteredTweet);
+ 		
  		logCleanTweet(filteredTweet);
  		return filteredTweet;
 	}
 	
+	private static void deleteEmptyWords(List<Word> filteredTweet) {
+		for (int i = 0; i < filteredTweet.size(); i++) {
+			if(filteredTweet.get(i).equals("")) {
+				filteredTweet.remove(i);
+			}
+		}
+	}
+
 	private static void logCleanTweet(List<Word> words) {
 		Tweet tweet = new Tweet();
 		tweet.setWords(words);
 		log.info("filtered tweet: {}", tweet.toString());
 	}
 	
-	public static List<Word> removeStopWords(List<Word> words) {
+	private static List<Word> removeStopWords(List<Word> words) {
 		List<Word> importantWords = new ArrayList<>();
 		importantWords.addAll(words);
 		for (Word w : words) {

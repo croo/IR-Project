@@ -7,7 +7,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -15,7 +17,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import logic.HashTag;
@@ -72,7 +76,8 @@ public class TabPanes {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(hashQueryField.getText().equals("")) 
-					JOptionPane.showMessageDialog(null, "Query empty");
+					JOptionPane.showOptionDialog(null, "Query text is empty", "ALERT", JOptionPane.WARNING_MESSAGE, JOptionPane.WARNING_MESSAGE, null, new Object[]{"Ok"}, 0);
+
 				else {
 					if(classifier[0].isSelected() || classifier[1].isSelected()) {
 						String query = hashQueryField.getText();
@@ -90,7 +95,7 @@ public class TabPanes {
 						generateResultPanel(query, hashtag.getBayesianPositiveWeight(), hashtag.getBayesianNegativeWeight());
 						tabs.setSelectedIndex(tabs.getTabCount()-1);
 					} else
-						JOptionPane.showMessageDialog(null, "Select at least one CLASSIFIER SELECTION");
+						JOptionPane.showOptionDialog(null, "Please select at least one option from CLASSIFIER SELECTION", "ALERT", JOptionPane.WARNING_MESSAGE, JOptionPane.WARNING_MESSAGE, null, new Object[]{"Ok"}, 0);
 				}
 			}
 		});
@@ -180,7 +185,7 @@ public class TabPanes {
 		
 		searchHashButton = new JButton ("Search");
 		searchHashButton.setFont(FONT);
-		searchHashButton.setBounds(230, 380, 100, 40);
+		searchHashButton.setBounds(250, 380, 100, 40);
 		hashPanel.add(searchHashButton);
 		
 	}
@@ -232,10 +237,52 @@ public class TabPanes {
 				}
 			});
 		}
+
+		//add uncertain tweets
+		final String[] uncertainTweets = {"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", "mwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqwwwwwwwwwwwww", "will separate each random string with your entered text or a new line if", " is not a count of single characters but a count of items from the delimited input elements"};
+		final int uncertainCount = uncertainTweets.length;
+		if(uncertainCount == 0) {
+			JLabel noUncertains = new JLabel("No uncertain tweets to rate");
+			noUncertains.setFont(new Font("Courier", Font.BOLD, 17));
+			noUncertains.setBounds(30, 90, 400, 30);
+			resultPanel.add(noUncertains);
+		} else {
+			JLabel uncertainLabel = new JLabel("Rate these uncertain tweets");
+			uncertainLabel.setFont(new Font("Courier", Font.BOLD, 17));
+			uncertainLabel.setBounds(30, 90, 400, 30);
+			resultPanel.add(uncertainLabel);
+			
+			JTextArea[] uncertainArea = new JTextArea[uncertainTweets.length];
+			JButton[][] uncertainButton = new JButton[uncertainTweets.length][2];
+			final String PATH = "./images/";
+			JSeparator[] line = new JSeparator[uncertainCount];
+			for(int i = 0; i < uncertainTweets.length; i++) {
+				uncertainArea[i] = new JTextArea();
+				uncertainArea[i].setEditable(false);
+				uncertainArea[i].setBackground(resultPanel.getBackground());
+				uncertainArea[i].setText(uncertainTweets[i]);
+				uncertainArea[i].setLineWrap(true);
+				uncertainArea[i].setBounds(10, 141+(50*i), 520, 32);
+				resultPanel.add(uncertainArea[i]);
+				for(int j = 0; j < 2; j++) {
+					uncertainButton[i][j] = new JButton(new ImageIcon(j==0? PATH+"green.png": PATH+"red.png"));
+					//make actionlistener and disable
+					uncertainButton[i][j].setBorder(BorderFactory.createLineBorder(Color.black));
+					uncertainButton[i][j].setBounds(555+(40*j), 140+(50*i), 30, 30);
+					resultPanel.add(uncertainButton[i][j]);
+				}
+				line[i] = new JSeparator(JSeparator.HORIZONTAL);
+				line[i].setForeground(Color.black);
+				line[i].setBounds(5, 180+(50*i), 625, 5);
+				resultPanel.add(line[i]);
+			}
+			resultPanel.remove(line[line.length-1]);
+		}
+				
 		
 		clearButton = new JButton ("Clear");
 		clearButton.setFont(FONT);
-		clearButton.setBounds(230, 410, 100, 40);
+		clearButton.setBounds(250, 410, 100, 40);
 		resultPanel.add(clearButton);
 		clearButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
@@ -247,7 +294,6 @@ public class TabPanes {
 				tabs.remove(tabs.getSelectedIndex());
 			}
 		});
-		
 		tabs.addTab("Result for "+query, resultPanel);
 	}
 }

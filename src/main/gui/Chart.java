@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ public class Chart extends JPanel
 		final JFrame frame = mainFrame;
 		barFrame = new JFrame();
 		barFrame.setSize(100, 200);
-		barFrame.setBounds(980, 100, 100, 200);
+		barFrame.setBounds(1000, 100, 100, 200);
 		barFrame.addWindowListener(new WindowListener () {
 			public void windowClosing(WindowEvent arg0) {
 				frame.enable();

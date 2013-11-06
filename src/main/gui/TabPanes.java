@@ -1,5 +1,6 @@
 package main.gui;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -51,6 +52,7 @@ public class TabPanes {
 	protected JCheckBox[] classifier;
 	//Result tabpane
 	protected JPanel resultPanel;
+	protected ButtonListener buttonListener;
 	protected JButton clearButton;
 	
 	
@@ -239,7 +241,7 @@ public class TabPanes {
 		}
 
 		//add uncertain tweets
-		final String[] uncertainTweets = {"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", "mwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqwwwwwwwwwwwww", "will separate each random string with your entered text or a new line if", " is not a count of single characters but a count of items from the delimited input elements"};
+		final String[] uncertainTweets = {"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", "mwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqwwwwwwwwwwwww", "will separate each random string with your entered text or a new line if", "is not a count of single characters but a count of items from the delimited input elements"};
 		final int uncertainCount = uncertainTweets.length;
 		if(uncertainCount == 0) {
 			JLabel noUncertains = new JLabel("No uncertain tweets to rate");
@@ -256,30 +258,34 @@ public class TabPanes {
 			JButton[][] uncertainButton = new JButton[uncertainTweets.length][2];
 			final String PATH = "./images/";
 			JSeparator[] line = new JSeparator[uncertainCount];
+			
+			buttonListener = new ButtonListener(uncertainTweets);
+			
 			for(int i = 0; i < uncertainTweets.length; i++) {
+				for(int j = 0; j < 2; j++) {
+					uncertainButton[i][j] = new JButton(new ImageIcon(j==0? PATH+"green.png": PATH+"red.png"));
+					uncertainButton[i][j].setName(i+""+j);
+					uncertainButton[i][j].setBorder(BorderFactory.createLineBorder(Color.black));
+					uncertainButton[i][j].setBounds(555+(40*j), 145+(50*i), 30, 30);
+					resultPanel.add(uncertainButton[i][j]);
+					uncertainButton[i][j].addActionListener(buttonListener);
+				}
 				uncertainArea[i] = new JTextArea();
-				uncertainArea[i].setEditable(false);
+				uncertainArea[i].setFont(new Font("Courier", Font.PLAIN, 15));
 				uncertainArea[i].setBackground(resultPanel.getBackground());
 				uncertainArea[i].setText(uncertainTweets[i]);
 				uncertainArea[i].setLineWrap(true);
-				uncertainArea[i].setBounds(10, 141+(50*i), 520, 32);
+				uncertainArea[i].setBounds(10, 140+(48*i), 520, 40);
+				uncertainArea[i].setEditable(false);
 				resultPanel.add(uncertainArea[i]);
-				for(int j = 0; j < 2; j++) {
-					uncertainButton[i][j] = new JButton(new ImageIcon(j==0? PATH+"green.png": PATH+"red.png"));
-					//make actionlistener and disable
-					uncertainButton[i][j].setBorder(BorderFactory.createLineBorder(Color.black));
-					uncertainButton[i][j].setBounds(555+(40*j), 140+(50*i), 30, 30);
-					resultPanel.add(uncertainButton[i][j]);
-				}
+				
 				line[i] = new JSeparator(JSeparator.HORIZONTAL);
 				line[i].setForeground(Color.black);
-				line[i].setBounds(5, 180+(50*i), 625, 5);
+				line[i].setBounds(5, 185+(50*i), 625, 5);
 				resultPanel.add(line[i]);
 			}
 			resultPanel.remove(line[line.length-1]);
 		}
-				
-		
 		clearButton = new JButton ("Clear");
 		clearButton.setFont(FONT);
 		clearButton.setBounds(250, 410, 100, 40);

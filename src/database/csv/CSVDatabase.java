@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 
 import logic.Classification;
-import logic.SimpleLinearAnalyzer;
 import logic.Utils;
 
 import org.slf4j.Logger;
@@ -25,7 +24,7 @@ public class CSVDatabase implements Database {
 	private static final int LABEL_COLUMN = 2;
 	private static final int TEXT_COLUMN = 3;
 
-	private Logger log = LoggerFactory.getLogger(SimpleLinearAnalyzer.class);
+	private Logger log = LoggerFactory.getLogger(CSVDatabase.class);
 	
 	private List<String> csvLines;
 

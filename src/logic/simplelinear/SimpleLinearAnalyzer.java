@@ -1,7 +1,13 @@
-package logic;
+package logic.simplelinear;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import logic.SpellChecker;
+import logic.Tokenizer;
+import logic.Tweet;
+import logic.Utils;
+import logic.Word;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

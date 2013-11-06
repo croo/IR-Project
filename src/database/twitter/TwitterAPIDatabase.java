@@ -15,15 +15,12 @@ public class TwitterAPIDatabase implements Database{
 
 	private Query query;
 	
-	private UsernameFinder userFinder;
-
 	public TwitterAPIDatabase() {
 		query = new Query();
 		query.setCount(100);
 		query.setLang("en");
 		query.setResultType(Query.MIXED);
 		
-		userFinder = new UsernameFinder(this);
 	}
 	
 	public void setQuery(Query query) {
@@ -65,11 +62,6 @@ public class TwitterAPIDatabase implements Database{
           .setOAuthConsumerSecret("9nHk3iCawNaqP0mGfeRlBvxqwRT2XXBYgcGv1Z8wSmA")
           .setOAuthAccessToken("1886475672-6HkkiT0Sm5LkGfwXLhMj574PEnWyBHfGx5RG9wi")
           .setOAuthAccessTokenSecret("S9hLN3ogFG9LQX7sq41pvdWotTDYmu9L5WpbSQTl7y0");
-	}
-
-	@Override
-	public List<String> getUsers(String namePrefix) {
-		return userFinder.getUser(namePrefix);
 	}
 
 }

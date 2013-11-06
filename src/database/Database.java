@@ -8,6 +8,5 @@ import twitter4j.User;
 public interface Database {
 	
 	List<Status> getTweets(String query);
-	
-	List<String> getUsers(String namePrefix);
+
 }

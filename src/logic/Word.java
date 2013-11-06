@@ -25,29 +25,30 @@ public class Word {
 	public Double getPositiveWeight() {
 		return positiveWeight;
 	}
+	
+	public void setPositiveWeight(Double average) {
+		positiveWeight = average;
+	}
+
 	public Double getNegativeWeight() {
 		return negativeWeight;
 	}
 	
-	public Double getPositiveBayesianWeight() {
+	public void setNegativeWeight(Double average) {
+		negativeWeight = average;
+	}
+	
+	public Double getPositiveNormalizedWeight() {
 		return (positiveWeight + negativeWeight == 0) ? 0:positiveWeight / (positiveWeight + negativeWeight);
 	}
 	
-	public Double getNegativeBayesianWeight() {
+	public Double getNegativeNormalizedWeight() {
 		return (positiveWeight + negativeWeight == 0) ? 0:negativeWeight / (positiveWeight + negativeWeight);
 	}
 	
 	@Override
 	public String toString() {
 		return word;
-	}
-
-	public void setPositiveWeight(Double average) {
-		positiveWeight = average;
-	}
-
-	public void setNegativeWeight(Double average) {
-		negativeWeight = average;
 	}
 	
 	@Override

@@ -1,97 +1,95 @@
 package database.csv;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import database.Database;
+import logic.Classification;
+import logic.SimpleLinearAnalyzer;
+import logic.Utils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import twitter4j.Status;
-import twitter4j.User;
-import au.com.bytecode.opencsv.CSVReader;
+import database.Database;
 
 public class CSVDatabase implements Database {
 
-	private static final String CSV_DIRECTORY = "csv_data/";
-	
-	private CSVReader reader;
 
-	private String fileName;
+	private static final String CSV_DELIMITER = "\t";
+	private static final int DATE_COLUMN = 0;
+	private static final int NAME_COLUMN = 1;
+	private static final int LABEL_COLUMN = 2;
+	private static final int TEXT_COLUMN = 3;
+
+	private Logger log = LoggerFactory.getLogger(SimpleLinearAnalyzer.class);
+	
+	private List<String> csvLines;
 
 	public CSVDatabase(String fileName) {
-		this.fileName = fileName;
-		
+		csvLines = Utils.readAllLines(fileName);
 	}
 
 	@Override
 	public List<Status> getTweets(String query) {
-		readCSVFile();
-		List<Status> tweets = new ArrayList<Status>();
-		String[] nextLine;
-		try {
-			while ((nextLine = reader.readNext()) != null) {
-				StatusCSVImpl tweet = new StatusCSVImpl();
-				
-				String dateString = nextLine[0];
-				String name = nextLine[1];
-				String text = nextLine[2];
-				
-				if(name.contains(query) || text.contains(query)){
-					//Date date = getDateFromString(dateString);
-					//tweet.setDate(date);
-					tweet.setUser(name);
-					tweet.setText(text);
-					tweets.add(tweet);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.err.println("Something bad happened during the reading of the database csv file.");
-		}
-		return tweets;
-	}
-
-	private void readCSVFile() {
-		try {
-			reader = new CSVReader(new FileReader(CSV_DIRECTORY + fileName));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			System.err.println("\n I could not find the test database file.\n");
-		}
 		
-	}
-
-	public Date getDateFromString(String dateString) {
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy");
-			return sdf.parse(dateString);
-		} catch (ParseException e) {
-			e.printStackTrace();
-			throw new RuntimeException(
-					"CSVDatabase date parsing just gone crazy.");
-		}
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		super.finalize();
-		reader.close();
-	}
-
-	@Override
-	public List<String> getUsers(String namePrefix) {
-		List<Status> tweets = getTweets(namePrefix);
-		List<String> userNames = new ArrayList<String>();
-		for (Status tweet : tweets) {
-			String name = tweet.getUser().getName();
-			if(name.startsWith(namePrefix)){
-				userNames.add(name);
+		List<Status> result = new ArrayList<Status>();
+		
+		for (String line : csvLines) {
+			log.trace("Read line from csv: " + line);
+			String[] row = line.split(CSV_DELIMITER);
+			String date = row[DATE_COLUMN];
+			String name = row[NAME_COLUMN];
+			String label = row[LABEL_COLUMN];
+			String text = row[TEXT_COLUMN];
+			
+			if(query.isEmpty() || query == null) {
+				return result;
+			} else if(text.contains(query)) {
+				StatusCSVImpl tweet = createTweet(date, name, label, text);
+				result.add(tweet);
 			}
 		}
-		return userNames;
+		return result;
 	}
+
+	public List<Status> getAllTweets() {
+		List<Status> result = new ArrayList<Status>();
+		for (String line : csvLines) {
+			log.trace("Read line from csv: " + line);
+			String[] row = line.split(CSV_DELIMITER);
+			String date = row[DATE_COLUMN];
+			String name = row[NAME_COLUMN];
+			String label = row[LABEL_COLUMN];
+			String text = row[TEXT_COLUMN];
+			
+			StatusCSVImpl tweet = createTweet(date, name, label, text);
+			result.add(tweet);
+		}
+		return result;
+	}
+	
+	private StatusCSVImpl createTweet(String date, String name, String label,
+			String text) {
+		StatusCSVImpl tweet = new StatusCSVImpl();
+		tweet.setUser(name);
+		tweet.setText(text);
+		tweet.setLabel(label == "1" ? Classification.POSITIVE : Classification.NEGATIVE);
+		tweet.setDate(getParsedDate(date));
+		return tweet;
+	}
+	
+	private Date getParsedDate(String date) {
+		try {
+			return new SimpleDateFormat("\"yyyy-dd-MM H:m:s:S\"").parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

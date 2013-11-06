@@ -6,18 +6,17 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import twitter4j.Status;
+
 
 public class Tweet {
 	
 	Logger log = LoggerFactory.getLogger(Tweet.class);
 	
+	private Status rawTweet;
 	private List<Word> words = new ArrayList<>();
-	private String originalText;
+	private Classification classification;
 
-	public Tweet(String text){
-		this.originalText = text;
-	}
-	
 	public void setWords(List<Word> cleanTweet) {
 		this.words = cleanTweet;
 	}
@@ -25,7 +24,7 @@ public class Tweet {
 	public Double getAveragePositiveWeight() {
 		List<Double> weights = new ArrayList<Double>();
 		for (Word w : words) {
-			weights.add(w.getPositiveBayesianWeight());
+			weights.add(w.getPositiveNormalizedWeight());
 		}
 		return Utils.getAverage(weights);
 	}
@@ -33,13 +32,9 @@ public class Tweet {
 	public Double getAverageNegativeWeight() {
 		List<Double> weights = new ArrayList<Double>();
 		for (Word w : words) {
-			weights.add(w.getNegativeBayesianWeight());
+			weights.add(w.getNegativeNormalizedWeight());
 		}
 		return Utils.getAverage(weights);
-	}
-	
-	public String getOriginalText() {
-		return originalText;
 	}
 	
 	/**
@@ -71,7 +66,14 @@ public class Tweet {
 		}else {
 			return avgNegWeight / (avgNegWeight + avgPosWeight); 
 		}
-		
+	}
+	
+	public void setClassification(Classification c)	{
+		this.classification = c;
+	}
+	
+	public Classification getClassification() {
+		return classification;
 	}
 	
 	@Override
@@ -85,6 +87,14 @@ public class Tweet {
 
 	public Double getConfidenceLevel() {
 		return Math.abs(getBayesianNegativeWeight() - getBayesianPositiveWeight());
+	}
+
+	public void setRawTweet(Status rawTweet) {
+		this.rawTweet = rawTweet;
+	}
+	
+	public Status getRawTweet() {
+		return rawTweet;
 	}
 	
 }

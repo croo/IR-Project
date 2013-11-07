@@ -46,7 +46,7 @@ import database.csv.StatusCSVImpl;
 		}
 		tweets = trainingSet.getAllTweets();
 		tweets.addAll(activeSet.getAllTweets());
-		
+
 		for (Status s : tweets) {
 			List<Word> tweet = Tokenizer.getTokens(s.getText());
 	

@@ -1,5 +1,6 @@
 package database.sentimental;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +32,13 @@ public class Emoticons {
 	private Emoticons() {
 		System.out.println("Initializing emoticons database...");
 		Integer lineNo = 0;
-		List<String> csvLines = Utils.readAllLines(EMOTICON_SCORE_PATH,Charset.forName("utf-8"));
+		List<String> csvLines = null;
+		try {
+			csvLines = Utils.readAllLines(EMOTICON_SCORE_PATH,Charset.forName("utf-8"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for (String line : csvLines) {
 			lineNo++;
 			data.add(line.split("\t"));

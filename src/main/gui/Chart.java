@@ -69,7 +69,7 @@ public class Chart extends JPanel
 
 	@Override
 	public Dimension getPreferredSize() {
-		return new Dimension(bars.size() * 10 + 2, 50);
+		return new Dimension(bars.size() * 10 + 2, 100);
 	}
 	
 	public void addChart(Chart chart) {

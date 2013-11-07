@@ -1,5 +1,6 @@
 package logic.naivebayes;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,9 +34,17 @@ import database.csv.StatusCSVImpl;
 	
 	public TrainingDataset(String trainingsetFilename, String activelearningFilename) {
 		System.out.println("Loading training data for naive bayes...");
-		CSVDatabase trainingSet = new CSVDatabase(trainingsetFilename);
+		CSVDatabase trainingSet = null;
+		
+		CSVDatabase activeSet = null;
+		try {
+			trainingSet = new CSVDatabase(trainingsetFilename);
+			activeSet = new CSVDatabase(activelearningFilename);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		tweets = trainingSet.getAllTweets();
-		CSVDatabase activeSet = new CSVDatabase(activelearningFilename);
 		tweets.addAll(activeSet.getAllTweets());
 		
 		for (Status s : tweets) {

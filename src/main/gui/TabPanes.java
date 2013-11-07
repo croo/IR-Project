@@ -1,10 +1,12 @@
 package main.gui;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -92,21 +94,22 @@ public class TabPanes {
 					if(classifier[0].isSelected() || classifier[1].isSelected()) {
 						String query = hashQueryField.getText();
 						Database db = createDatabase();
-						
-						List<Status> tweets = db.getTweets(query);
-						HashTag hashtag = new HashTag(query);
-						coTrainer.setRawTweets(tweets);
-						if(classifier[0].isSelected()) {
-							slaAnalyzedTweets = slaClassifier.getAnalyzedTweets(tweets);
-							hashtag.addAll(slaAnalyzedTweets);
+						if(db != null) {
+							List<Status> tweets = db.getTweets(query);
+							HashTag hashtag = new HashTag(query);
+							coTrainer.setRawTweets(tweets);
+							if(classifier[0].isSelected()) {
+								slaAnalyzedTweets = slaClassifier.getAnalyzedTweets(tweets);
+								hashtag.addAll(slaAnalyzedTweets);
+							}
+							if(classifier[1].isSelected()) {
+								nbAnalyzedTweets = nbClassifier.getAnalyzedTweets(tweets);
+								hashtag.addAll(nbAnalyzedTweets);
+							}
+							
+							generateResultPanel(query, getClassifierName(), hashtag);
+							tabs.setSelectedIndex(tabs.getTabCount()-1);
 						}
-						if(classifier[1].isSelected()) {
-							nbAnalyzedTweets = nbClassifier.getAnalyzedTweets(tweets);
-							hashtag.addAll(nbAnalyzedTweets);
-						}
-						
-						generateResultPanel(query, getClassifierName(), hashtag);
-						tabs.setSelectedIndex(tabs.getTabCount()-1);
 					} else
 						JOptionPane.showOptionDialog(null, "Please select at least one option from CLASSIFIER SELECTION", "ALERT", JOptionPane.WARNING_MESSAGE, JOptionPane.WARNING_MESSAGE, null, new Object[]{"Ok"}, 0);
 				}
@@ -125,7 +128,12 @@ public class TabPanes {
 			private Database createDatabase() {
 				Database db = null;
 				if(hashCsvButton.isSelected()) {
+					try {
 					db = new CSVDatabase(hashCsvFileField.getText().trim());
+					} catch(IOException nsfe) {
+						JOptionPane.showOptionDialog(null, "No such file found\n Type another one", "ALERT", JOptionPane.WARNING_MESSAGE, JOptionPane.WARNING_MESSAGE, null, new Object[]{"OK"}, 0);
+						return null;
+					}
 				} else if (hashTweetAPIButton.isSelected()) {
 					db = new TwitterAPIDatabase();
 				}
@@ -212,7 +220,7 @@ public class TabPanes {
 		for(int i = 0; i < classifier.length; i++) {
 			classifier[i] = new JCheckBox(CLASSIFIER_DESCRIPTION[i]);
 			classifier[i].setFont(FONT);
-			classifier[i].setBounds(20, 270+(40*i), 400, 30);
+			classifier[i].setBounds(20, 270+(40*i), 300, 30);
 			hashPanel.add(classifier[i]);
 		}
 		
@@ -220,6 +228,20 @@ public class TabPanes {
 		searchHashButton.setFont(FONT);
 		searchHashButton.setBounds(250, 380, 100, 40);
 		hashPanel.add(searchHashButton);
+		
+		JLabel logoLabel = new JLabel(new ImageIcon("./images/twitter.png"));
+		logoLabel.setBounds(340, 180, 209, 160);
+		hashPanel.add(logoLabel);
+		
+		JTextArea kopimi = new JTextArea();
+		kopimi.setText("KOPIMI\nWeb Information Retrieval\nand Data Mining\nAll rights to copy");
+		kopimi.setFont(new Font("Courier", Font.ITALIC, 14));
+		kopimi.setLineWrap(true);
+		kopimi.setBackground(hashPanel.getBackground());
+		kopimi.setBounds(400, 340, 260, 100);
+		kopimi.setEditable(false);
+		hashPanel.add(kopimi);
+		
 		
 	}
 	
@@ -323,7 +345,7 @@ public class TabPanes {
 					uncertainButton[i][j].addActionListener(buttonListener);
 				}
 				uncertainArea[i] = new JTextArea();
-				uncertainArea[i].setFont(new Font("Courier", Font.PLAIN, 15));
+				uncertainArea[i].setFont(new Font("Courier", Font.PLAIN, 14));
 				uncertainArea[i].setBackground(resultPanel.getBackground());
 				uncertainArea[i].setText(uncertainTweets[i]);
 				uncertainArea[i].setLineWrap(true);

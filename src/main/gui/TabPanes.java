@@ -1,6 +1,5 @@
 package main.gui;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -270,13 +269,14 @@ public class TabPanes {
 		resultPanel.add(queryLabel);
 		
 		JLabel pos = new JLabel("+"+posValue+"%");
-		pos.setFont(FONT); 
-		pos.setForeground(Color.green);
+		pos.setFont(new Font("Courier", Font.BOLD, 16));
+		Color color = new Color(0, 200, 0);
+		pos.setForeground(color);
 		pos.setBounds(500, 10, 60, 30);
 		resultPanel.add(pos);		
 		
 		JLabel neg = new JLabel("-"+negValue+"%");
-		neg.setFont(FONT); 
+		neg.setFont(new Font("Courier", Font.BOLD, 16)); 
 		neg.setForeground(Color.red);
 		neg.setBounds(560, 10, 60, 30);
 		resultPanel.add(neg);

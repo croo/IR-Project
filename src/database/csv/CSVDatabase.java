@@ -76,7 +76,7 @@ public class CSVDatabase implements Database {
 		tweet.setUser(name);
 		tweet.setText(text);
 		tweet.setLabel(label.equals("1") ? Classification.POSITIVE : Classification.NEGATIVE);
-		tweet.setDate(getParsedDate(date));
+		//tweet.setDate(getParsedDate(date));
 		return tweet;
 	}
 	

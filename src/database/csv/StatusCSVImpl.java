@@ -48,7 +48,7 @@ public class StatusCSVImpl implements Status {
 
 	@Override
 	public int compareTo(Status o) {
-		return createdAt.compareTo(o.getCreatedAt());
+		return text.compareTo(o.getText());
 	}
 
 	public void setUser(String userName) {

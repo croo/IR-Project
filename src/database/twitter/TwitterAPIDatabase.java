@@ -41,11 +41,25 @@ public class TwitterAPIDatabase implements Database{
 //                    System.out.println(tweet.getCreatedAt() + " - @" + tweet.getUser().getScreenName() + " - " + tweet.getText());
 //                }
 //            } while ((query = result.nextQuery()) != null);
+            removeDuplicates(tweets);
         } catch (TwitterException e) {
             e.printStackTrace();
             System.out.println("Failed to search tweets: " + e.getMessage());
         }
         return tweets;
+	}
+
+	private void removeDuplicates(List<Status> tweets) {
+		for (int i = 0; i < tweets.size(); i++) {
+			for (int j = i; j < tweets.size(); j++) {
+				if(i != j) {
+					if(tweets.get(i).getText().equals(tweets.get(j).getText())) {
+						System.err.println("Removed :" + tweets.get(j).getText());
+						tweets.remove(j);
+					}
+				}
+			}
+		}
 	}
 
 	private Twitter getTwitterApi() {

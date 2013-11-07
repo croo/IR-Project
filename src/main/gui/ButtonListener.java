@@ -39,7 +39,7 @@ public class ButtonListener implements ActionListener {
 			} else { 
 				JOptionPane.showOptionDialog(null, "Negative on '"+tweets[r]+"'\nNo chance to rate as positive", "Thanks for rating", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[]{"OK"}, 0);
 				tmp.setEnabled(false);
-				save(tweets[r],1);
+				save(tweets[r],0);
 			}
 		}
 		state[r][0] = true;

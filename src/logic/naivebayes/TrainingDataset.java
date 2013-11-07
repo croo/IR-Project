@@ -34,9 +34,10 @@ import database.csv.StatusCSVImpl;
 	
 	public TrainingDataset(String trainingsetFilename, String activelearningFilename) {
 		System.out.println("Loading training data for naive bayes...");
-		CSVDatabase trainingSet = null;
 		
+		CSVDatabase trainingSet = null;
 		CSVDatabase activeSet = null;
+		
 		try {
 			trainingSet = new CSVDatabase(trainingsetFilename);
 			activeSet = new CSVDatabase(activelearningFilename);

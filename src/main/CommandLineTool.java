@@ -101,11 +101,11 @@ public class CommandLineTool {
 		 		
 		 		SimpleDateFormat formatter = new SimpleDateFormat("\"yyyy-dd-MM H:m:s:S\"");
 		 		try {
-					writer.append("\""+sln.getNormalizedPositiveWeight() +"\"" + 
-							"\t" +"\""+ sln.getNormalizedNegativeWeight() +"\""+
+					writer.append(sln.getNormalizedPositiveWeight() + 
+							"\t" + sln.getNormalizedNegativeWeight() +
 							"\t" +"\""+ sln.getClassification()+"\"" +
-							"\t" +"\"" + nb.getNaiveBayesPositiveProbability() +"\""+
-							"\t" + "\"" + nb.getNaiveBayesNegativeProbability() +"\"" +
+							"\t" + nb.getNaiveBayesPositiveProbability()*1000000000000000000.0 +
+							"\t" + nb.getNaiveBayesNegativeProbability()*1000000000000000000.0 +
 							"\t" + "\"" + nb.getClassification() + "\"" +
 							"\t" + "\"" + sln.getRawTweet().getText() + "\"" +
 							"\t" + "\"" + ((StatusCSVImpl)sln.getRawTweet()).getLabel() +"\"");

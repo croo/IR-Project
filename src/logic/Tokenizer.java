@@ -46,6 +46,7 @@ public class Tokenizer {
  		tweet = tweet.replaceAll(links,"");
  		tweet = tweet.replaceAll("\"", " ");
  		tweet = tweet.replaceAll(multipleSpaces," ");
+ 		tweet = tweet.replace("\n", "").replace("\r", "");
  		
  		String[] wordArray = tweet.trim().split(" ");
  		for (int i = 0; i < wordArray.length; i++) {

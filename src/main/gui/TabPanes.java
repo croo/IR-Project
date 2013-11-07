@@ -247,12 +247,17 @@ public class TabPanes {
 	}
 	
 	private void generateResultPanel(String query, final String classifierName, HashTag hashtag) {
+		System.out.println("stop here.");
 		if(classifierName.equals("Naive Bayes")) {
 			posValue = (int)Math.round(100*hashtag.getPositivePercentage());
 			negValue = (int)Math.round(100*hashtag.getNegativePercentage());
 		} else if (classifierName.equals("Simple Linear")) {
 			posValue = (int)Math.round(100*hashtag.getNormalizedPositiveWeight());
 			negValue = (int)Math.round(100*hashtag.getNormalizedNegativeWeight());
+		} else {
+			coTrainer.run();
+			posValue = (int)Math.round(100*coTrainer.getPositiveWeight());
+			negValue = (int)Math.round(100*coTrainer.getNegativeWeight());
 		}
 		
 		resultPanel = new JPanel();

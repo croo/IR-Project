@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import logic.SpellChecker;
@@ -51,14 +52,13 @@ public class CommandLineTool {
 
 			try {
 				writer = new BufferedWriter(new OutputStreamWriter(
-				        new FileOutputStream("first.txt", true), "UTF-8"));
+				        new FileOutputStream("test_output.txt", true), "UTF-8"));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			} catch (FileNotFoundException e) {
 				System.err.println("Output file not found.(what the hell, i just created it. This is not possible.)");
 				e.printStackTrace();
 			}
-			//SimpleDateFormat formatter = new SimpleDateFormat("\"yyyy-dd-MM H:m:s:S\"");
 			int nbGood = 0;
 			int nbBad = 0;
 			int slnGood = 0;
@@ -70,53 +70,60 @@ public class CommandLineTool {
 			int oneGood = 0;
 			int bothWrong = 0;
 		 	for (Status tweet : tweets) {
-		 		Tweet slnTweet = slnAnalyzer.getAnalyzedTweet(tweet);
-		 		Tweet nbTweet = nbAnalyzer.getAnalyzedTweet(tweet);
+		 		Tweet sln = slnAnalyzer.getAnalyzedTweet(tweet);
+		 		Tweet nb = nbAnalyzer.getAnalyzedTweet(tweet);
 		 		
-		 		if(((StatusCSVImpl)nbTweet.getRawTweet()).getLabel() == nbTweet.getClassification()) {
+		 		if(((StatusCSVImpl)nb.getRawTweet()).getLabel() == nb.getClassification()) {
 		 			nbGood++;
 		 		} else {
 		 			nbBad++;
 		 		}
 		 		
-		 		if(((StatusCSVImpl)slnTweet.getRawTweet()).getLabel() == slnTweet.getClassification()) {
+		 		if(((StatusCSVImpl)sln.getRawTweet()).getLabel() == sln.getClassification()) {
 		 			slnGood++;
 		 		} else {
 		 			slnBad++;
 		 		}
 		 		
-		 		if(nbTweet.getClassification() == slnTweet.getClassification()) {
+		 		if(nb.getClassification() == sln.getClassification()) {
 		 			agrees++;
 		 		} else {
 		 			disagrees++;
 		 		}
 		 		
-		 		if (((StatusCSVImpl)nbTweet.getRawTweet()).getLabel() == nbTweet.getClassification() && ((StatusCSVImpl)slnTweet.getRawTweet()).getLabel() == slnTweet.getClassification()) {
+		 		if (((StatusCSVImpl)nb.getRawTweet()).getLabel() == nb.getClassification() && ((StatusCSVImpl)sln.getRawTweet()).getLabel() == sln.getClassification()) {
 		 			bothGood++;
-		 		} else if ((((StatusCSVImpl)nbTweet.getRawTweet()).getLabel() == nbTweet.getClassification()) != (((StatusCSVImpl)slnTweet.getRawTweet()).getLabel() == slnTweet.getClassification())) {
+		 		} else if ((((StatusCSVImpl)nb.getRawTweet()).getLabel() == nb.getClassification()) != (((StatusCSVImpl)sln.getRawTweet()).getLabel() == sln.getClassification())) {
 		 			oneGood++;
 		 		} else {
 		 			bothWrong++;
 		 		}
-//		 		try {
-//					writer.append(formatter.format(t.getRawTweet().getCreatedAt()) + 
-//							"\t" + t.getRawTweet().getUser().getName() + 
-//							"\t" + "\""+t.getBayesianPositiveWeight() +"\"" + 
-//							"\t" +"\""+ t.getBayesianNegativeWeight() +"\""+
-//							"\t" +"\""+ ((t.getBayesianPositiveWeight() > t.getBayesianNegativeWeight()) ? "1":"0")+"\"");
+		 		
+		 		SimpleDateFormat formatter = new SimpleDateFormat("\"yyyy-dd-MM H:m:s:S\"");
+		 		try {
+					writer.append("\""+sln.getNormalizedPositiveWeight() +"\"" + 
+							"\t" +"\""+ sln.getNormalizedNegativeWeight() +"\""+
+							"\t" +"\""+ sln.getClassification()+"\"" +
+							"\t" +"\"" + nb.getNaiveBayesPositiveProbability() +"\""+
+							"\t" + "\"" + nb.getNaiveBayesNegativeProbability() +"\"" +
+							"\t" + "\"" + nb.getClassification() + "\"" +
+							"\t" + "\"" + sln.getRawTweet().getText() + "\"" +
+							"\t" + "\"" + ((StatusCSVImpl)sln.getRawTweet()).getLabel() +"\"");
+					
+					
 //		 			writer.append(((slnTweet.getClassification() == Classification.POSITIVE) ? "1" :"0") + "\t" +
 //		 					  ((nbTweet.getClassification() == Classification.POSITIVE) ? "1" : "0") + "\t" +
 //		 						((StatusCSVImpl)nbTweet.getRawTweet()).getLabel() + "\t" +tweet.getText());
-//					writer.newLine();
+					writer.newLine();
 					/*System.out.println(((slnTweet.getClassification() == Classification.POSITIVE) ? "1" :"0") + "\t" +
 		 					  ((nbTweet.getClassification() == Classification.POSITIVE) ? "1" : "0") + "\t" +
 		 						((StatusCSVImpl)nbTweet.getRawTweet()).getLabel() + "\t" +tweet.getText());*/
-//					System.out.println("+:" + nbTweet.getNaiveBayesPositiveProbability() + "\t-:" + nbTweet.getNaiveBayesNegativeProbability() + "\t" + nbTweet.getClassification() + "\t" +
-//		 						((StatusCSVImpl)nbTweet.getRawTweet()).getLabel() + "\t" +tweet.getText());
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
+					System.out.println("+:" + nb.getNaiveBayesPositiveProbability() + "\t-:" + nb.getNaiveBayesNegativeProbability() + "\t" + nb.getClassification() + "\t" +
+		 						((StatusCSVImpl)nb.getRawTweet()).getLabel() + "\t" +tweet.getText());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		 	}	
 		 	System.out.println("Naive bayes on test data:");
 		 	System.out.println((new Double(nbGood) / new Double(nbGood + nbBad))*100.0 + "% good");

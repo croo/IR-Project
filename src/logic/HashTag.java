@@ -18,6 +18,22 @@ public class HashTag {
 		this.name = name;
 	}
 
+	public Double getPositivePercentage() {
+		int count = 0;
+		for (Tweet tweet : tweets) {
+			count += tweet.getClassification() == Classification.POSITIVE ? 1 : 0;
+		}
+		return new Double(count) / new Double(tweets.size());
+	}
+	
+	public Double getNegativePercentage() {
+		int count = 0;
+		for (Tweet tweet : tweets) {
+			count += tweet.getClassification() == Classification.NEGATIVE ? 1 : 0;
+		}
+		return new Double(count) / new Double(tweets.size());
+	}
+	
 	public Double getAveragePositiveWeight() {
 		List<Double> weights = new ArrayList<Double>();
 		for (Tweet t : tweets) {

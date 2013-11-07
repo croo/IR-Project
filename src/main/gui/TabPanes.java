@@ -62,6 +62,8 @@ public class TabPanes {
 	private List<Tweet> slaAnalyzedTweets;
 	private List<Tweet> nbAnalyzedTweets;
 	private CoTrainer coTrainer;
+	private int posValue;
+	private int negValue;
 	
 	public TabPanes (JFrame mainFrame, JPanel topPanel, SimpleLinearAnalyzer slaClassifier, NaiveBayesAnalyzer nbClassifier, CoTrainer coTrainer) {
 		this.mainFrame = mainFrame;
@@ -245,9 +247,15 @@ public class TabPanes {
 		
 	}
 	
-	private void generateResultPanel(String query, String classifierName, HashTag hashtag) {
-		final int posValue = (int)Math.round(100*hashtag.getAveragePositiveWeight());
-		final int negValue = (int)Math.round(100*hashtag.getAverageNegativeWeight());
+	private void generateResultPanel(String query, final String classifierName, HashTag hashtag) {
+		if(classifierName.equals("Naive Bayes")) {
+			posValue = (int)Math.round(100*hashtag.getPositivePercentage());
+			negValue = (int)Math.round(100*hashtag.getNegativePercentage());
+		} else if (classifierName.equals("Simple Linear")) {
+			posValue = (int)Math.round(100*hashtag.getNormalizedPositiveWeight());
+			negValue = (int)Math.round(100*hashtag.getNormalizedNegativeWeight());
+		}
+		
 		resultPanel = new JPanel();
 		resultPanel.setLayout(null);
 		

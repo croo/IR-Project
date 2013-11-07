@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import logic.Classification;
+import logic.SpellChecker;
 import logic.Tokenizer;
 import logic.Word;
 import twitter4j.Status;
@@ -30,13 +31,16 @@ import database.csv.StatusCSVImpl;
 	private Map<Word,Integer> positiveBagOfWords = new HashMap<>();
 	private Map<Word,Integer> negativeBagOfWords = new HashMap<>();
 	
-	public TrainingDataset(String trainingsetFilename) {
+	public TrainingDataset(String trainingsetFilename, String activelearningFilename) {
 		System.out.println("Loading training data for naive bayes...");
-		CSVDatabase csv = new CSVDatabase(trainingsetFilename);
-		tweets = csv.getAllTweets();
+		CSVDatabase trainingSet = new CSVDatabase(trainingsetFilename);
+		tweets = trainingSet.getAllTweets();
+		CSVDatabase activeSet = new CSVDatabase(activelearningFilename);
+		tweets.addAll(activeSet.getAllTweets());
 		
 		for (Status s : tweets) {
 			List<Word> tweet = Tokenizer.getTokens(s.getText());
+	
 			vocabularySize += tweet.size();
 			if (((StatusCSVImpl)s).getLabel() == Classification.POSITIVE) {
 				putInBagOfWords(tweet,positiveBagOfWords);
@@ -78,7 +82,9 @@ import database.csv.StatusCSVImpl;
 		Double probability = 1.0;
 		
 		for (Word word : words) {
-			probability *= probabilityOf(word,label);
+			Double p = probabilityOf(word,label);
+			word.setBayesianWeight(p,label);
+			probability *= p;
 		}
 		return probability;
 	}
@@ -115,5 +121,9 @@ import database.csv.StatusCSVImpl;
 		} else {
 			return negativeBagOfWords.get(word) == null ? 0 : negativeBagOfWords.get(word);
 		}
+	}
+
+	public boolean contains(Status tweet) {
+		return tweets.contains(tweet);
 	}
 }

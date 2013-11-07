@@ -17,9 +17,6 @@ public class Word {
 	private Double positiveWeight; 
 	private Double negativeWeight;
 	
-	private Double bayesianPositiveWeight;
-	private Double bayesianNegativeWeight;
-
 	public Word(String word) {
 		this.word = word;
 	}
@@ -79,18 +76,18 @@ public class Word {
 	}
 
 	public Double getBayesianPositiveWeight() {
-		return bayesianPositiveWeight;
-	}
-
-	public void setBayesianPositiveWeight(Double bayesianPositiveWeight) {
-		this.bayesianPositiveWeight = bayesianPositiveWeight;
+		return positiveWeight;
 	}
 
 	public Double getBayesianNegativeWeight() {
-		return bayesianNegativeWeight;
+		return negativeWeight;
 	}
 
-	public void setBayesianNegativeWeight(Double bayesianNegativeWeight) {
-		this.bayesianNegativeWeight = bayesianNegativeWeight;
+	public void setBayesianWeight(Double probability, Classification label) {
+		if(label == Classification.POSITIVE) {
+			this.positiveWeight = probability;
+		} else {
+			this.negativeWeight = probability;
+		}
 	}
 }

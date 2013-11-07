@@ -1,5 +1,6 @@
 package logic.naivebayes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import logic.Classification;
@@ -16,9 +17,13 @@ import twitter4j.Status;
 
 public class NaiveBayesAnalyzer implements Classifier{
 	
+
 	Logger log = LoggerFactory.getLogger(NaiveBayesAnalyzer.class);
 
-	private TrainingDataset trainingSet = new TrainingDataset("training_data/merged_tabbed_training_data.csv");
+	private static final String TRAINING_FILE = "training_data/merged_tabbed_training_data.csv";
+	private static final String ACTIVE_LEARNING_FILE = "training_data/active_learning.csv";
+	
+	private TrainingDataset trainingSet = new TrainingDataset(TRAINING_FILE,ACTIVE_LEARNING_FILE);
 	
 	@Override
 	public Tweet getAnalyzedTweet(Status rawTweet) {
@@ -59,6 +64,18 @@ public class NaiveBayesAnalyzer implements Classifier{
 		double probability = (probabilityOfLabel * probabilityOfWordsBeingInClass); 
 		//			/ (probabilityOfWords);
 		return probability;
+	}
+	
+	public List<Tweet> getAnalyzedTweets(List<Status> tweets) {
+		List<Tweet> analyzedTweets = new ArrayList<>();
+		for (Status tweet : tweets) {
+			analyzedTweets.add(getAnalyzedTweet(tweet));
+		}
+		return analyzedTweets;
+	}
+
+	public boolean trainingSetContains(Status tweet) {
+		return trainingSet.contains(tweet);
 	}
 
 }

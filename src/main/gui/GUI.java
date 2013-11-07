@@ -5,7 +5,9 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import logic.CoTrainer;
 import logic.SpellChecker;
+import logic.naivebayes.NaiveBayesAnalyzer;
 import logic.simplelinear.SimpleLinearAnalyzer;
 
 import org.slf4j.impl.SimpleLogger;
@@ -37,9 +39,11 @@ public class GUI {
 	 	SpellChecker spellChecker = SpellChecker.getInstance();
 
 
-		SimpleLinearAnalyzer analyzer = new SimpleLinearAnalyzer(sentiWordNet, emoticons, boostWords, spellChecker);
+		SimpleLinearAnalyzer slaClassifier = new SimpleLinearAnalyzer(sentiWordNet, emoticons, boostWords, spellChecker);
+		NaiveBayesAnalyzer nbClassifier = new NaiveBayesAnalyzer();
+		CoTrainer coTrainer = new CoTrainer(slaClassifier,nbClassifier);
 
-		new TabPanes(mainframe, mainPanel, analyzer);
+		new TabPanes(mainframe, mainPanel, slaClassifier, nbClassifier, coTrainer);
 		
 		mainframe.getContentPane().add(mainPanel);
 		mainframe.setResizable(false);

@@ -1,6 +1,5 @@
 package main.gui;
 import java.awt.Color;
-import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,8 +22,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import logic.CoTrainer;
 import logic.HashTag;
 import logic.Tweet;
+import logic.naivebayes.NaiveBayesAnalyzer;
 import logic.simplelinear.SimpleLinearAnalyzer;
 import twitter4j.Status;
 import database.Database;
@@ -47,19 +48,25 @@ public class TabPanes {
 	private ButtonGroup hashButtonGroup;
 
 	protected JTextField hashCsvFileField, hashQueryField;
-	private SimpleLinearAnalyzer analyzer;
-	private final String[] CLASSIFIER_DESCRIPTION = {" Simple Linear Classifier", " Naïve Bayes"};
+	private SimpleLinearAnalyzer slaClassifier;
+	private final String[] CLASSIFIER_DESCRIPTION = {" Simple Linear Classifier", " Naive Bayes"};
 	protected JCheckBox[] classifier;
 	//Result tabpane
 	protected JPanel resultPanel;
 	protected ButtonListener buttonListener;
 	protected JButton clearButton;
+	private NaiveBayesAnalyzer nbClassifier;
 	
+	private List<Tweet> slaAnalyzedTweets;
+	private List<Tweet> nbAnalyzedTweets;
+	private CoTrainer coTrainer;
 	
-	public TabPanes (JFrame mainFrame, JPanel topPanel, SimpleLinearAnalyzer analyzer) {
+	public TabPanes (JFrame mainFrame, JPanel topPanel, SimpleLinearAnalyzer slaClassifier, NaiveBayesAnalyzer nbClassifier, CoTrainer coTrainer) {
 		this.mainFrame = mainFrame;
 		this.topPanel = topPanel;
-		this.analyzer = analyzer;
+		this.slaClassifier = slaClassifier;
+		this.nbClassifier = nbClassifier;
+		this.coTrainer = coTrainer;
 		classifier = new JCheckBox[CLASSIFIER_DESCRIPTION.length];
 		tabs = new JTabbedPane();
 		tabInit();
@@ -75,6 +82,7 @@ public class TabPanes {
 	private void initHashSearchButton() {
 		searchHashButton.addActionListener(new ActionListener() {
 			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(hashQueryField.getText().equals("")) 
@@ -83,22 +91,45 @@ public class TabPanes {
 				else {
 					if(classifier[0].isSelected() || classifier[1].isSelected()) {
 						String query = hashQueryField.getText();
-						Database db = null;
-						if(hashCsvButton.isSelected()) {
-							db = new CSVDatabase(hashCsvFileField.getText().trim());
-						} else if (hashTweetAPIButton.isSelected()) {
-							db = new TwitterAPIDatabase();
-						}
+						Database db = createDatabase();
 						
 						List<Status> tweets = db.getTweets(query);
 						HashTag hashtag = new HashTag(query);
-						List<Tweet> analyzedTweets = analyzer.getAnalyzedTweets(tweets);
-						hashtag.addAll(analyzedTweets);
-						generateResultPanel(query, hashtag.getBayesianPositiveWeight(), hashtag.getBayesianNegativeWeight());
+						coTrainer.setRawTweets(tweets);
+						if(classifier[0].isSelected()) {
+							slaAnalyzedTweets = slaClassifier.getAnalyzedTweets(tweets);
+							hashtag.addAll(slaAnalyzedTweets);
+						}
+						if(classifier[1].isSelected()) {
+							nbAnalyzedTweets = nbClassifier.getAnalyzedTweets(tweets);
+							hashtag.addAll(nbAnalyzedTweets);
+						}
+						
+						generateResultPanel(query, getClassifierName(), hashtag);
 						tabs.setSelectedIndex(tabs.getTabCount()-1);
 					} else
 						JOptionPane.showOptionDialog(null, "Please select at least one option from CLASSIFIER SELECTION", "ALERT", JOptionPane.WARNING_MESSAGE, JOptionPane.WARNING_MESSAGE, null, new Object[]{"Ok"}, 0);
 				}
+			}
+
+			private String getClassifierName() {
+				if(classifier[0].isSelected() && classifier[1].isSelected()) {
+					return "Both";
+				} else if(classifier[0].isSelected()) {
+					return "Simple Linear";
+				} else {
+					return "Naive Bayes";
+				}
+			}
+
+			private Database createDatabase() {
+				Database db = null;
+				if(hashCsvButton.isSelected()) {
+					db = new CSVDatabase(hashCsvFileField.getText().trim());
+				} else if (hashTweetAPIButton.isSelected()) {
+					db = new TwitterAPIDatabase();
+				}
+				return db;
 			}
 		});
 	}
@@ -192,9 +223,9 @@ public class TabPanes {
 		
 	}
 	
-	private void generateResultPanel(String query, final double positive, final double negative) {
-		final int posValue = (int)Math.round(100*positive);
-		final int negValue = (int)Math.round(100*negative);
+	private void generateResultPanel(String query, String classifierName, HashTag hashtag) {
+		final int posValue = (int)Math.round(100*hashtag.getAveragePositiveWeight());
+		final int negValue = (int)Math.round(100*hashtag.getAverageNegativeWeight());
 		resultPanel = new JPanel();
 		resultPanel.setLayout(null);
 		
@@ -208,13 +239,13 @@ public class TabPanes {
 		queryLabel.setBounds(140, 10, 260, 30);
 		resultPanel.add(queryLabel);
 		
-		JLabel pos = new JLabel("+"+Math.round(100*positive)+"%");
+		JLabel pos = new JLabel("+"+posValue+"%");
 		pos.setFont(FONT); 
 		pos.setForeground(Color.green);
 		pos.setBounds(500, 10, 60, 30);
 		resultPanel.add(pos);		
 		
-		JLabel neg = new JLabel("-"+Math.round(100*negative)+"%");
+		JLabel neg = new JLabel("-"+negValue+"%");
 		neg.setFont(FONT); 
 		neg.setForeground(Color.red);
 		neg.setBounds(560, 10, 60, 30);
@@ -240,8 +271,29 @@ public class TabPanes {
 			});
 		}
 
-		//add uncertain tweets
-		final String[] uncertainTweets = {"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", "mwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqwwwwwwwwwwwww", "will separate each random string with your entered text or a new line if", "is not a count of single characters but a count of items from the delimited input elements"};
+		if(classifierName.equals("Both")) {
+			addUncertainTweets();
+		}
+		
+		clearButton = new JButton ("Close");
+		clearButton.setFont(FONT);
+		clearButton.setBounds(250, 410, 100, 40);
+		resultPanel.add(clearButton);
+		clearButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				hashQueryField.setText("");
+				hashCsvFileField.setText("");
+				for(JCheckBox box: classifier)
+					box.setSelected(false);
+				tabs.setEnabledAt(0, true);
+				tabs.remove(tabs.getSelectedIndex());
+			}
+		});
+		tabs.addTab(classifierName + ": "+query, resultPanel);
+	}
+
+	private void addUncertainTweets() {
+		final String[] uncertainTweets = coTrainer.getUncertainTweets();
 		final int uncertainCount = uncertainTweets.length;
 		if(uncertainCount == 0) {
 			JLabel noUncertains = new JLabel("No uncertain tweets to rate");
@@ -286,20 +338,5 @@ public class TabPanes {
 			}
 			resultPanel.remove(line[line.length-1]);
 		}
-		clearButton = new JButton ("Clear");
-		clearButton.setFont(FONT);
-		clearButton.setBounds(250, 410, 100, 40);
-		resultPanel.add(clearButton);
-		clearButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				hashQueryField.setText("");
-				hashCsvFileField.setText("");
-				for(JCheckBox box: classifier)
-					box.setSelected(false);
-				tabs.setEnabledAt(0, true);
-				tabs.remove(tabs.getSelectedIndex());
-			}
-		});
-		tabs.addTab("Result for "+query, resultPanel);
 	}
 }

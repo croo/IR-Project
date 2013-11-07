@@ -34,7 +34,7 @@ public class HashTag {
 		return Utils.getAverage(weights);
 	}
 	
-	public Double getBayesianPositiveWeight() {
+	public Double getNormalizedPositiveWeight() {
 		Double avgPosWeight = getAveragePositiveWeight();
 		Double avgNegWeight = getAverageNegativeWeight();
 		if((avgPosWeight + avgNegWeight) == 0.0) {
@@ -45,7 +45,7 @@ public class HashTag {
 		}
 	}
 	
-	public Double getBayesianNegativeWeight() {
+	public Double getNormalizedNegativeWeight() {
 		Double avgPosWeight = getAveragePositiveWeight();
 		Double avgNegWeight = getAverageNegativeWeight();
 		if((avgPosWeight + avgNegWeight) == 0.0) {
@@ -64,5 +64,5 @@ public class HashTag {
 	public void addAll(List<Tweet> analyzedTweets) {
 		tweets.addAll(analyzedTweets);
 	}
-	
+
 }

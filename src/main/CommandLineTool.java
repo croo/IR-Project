@@ -64,7 +64,7 @@ public class CommandLineTool {
 			int bothWrong = 0;
 		 	for (Status tweet : tweets) {
 		 		Tweet slnTweet = slnAnalyzer.getAnalyzedTweet(tweet);
-		 		Tweet nbTweet = nbAnalyzer.getTAnalyzedTweet(tweet);
+		 		Tweet nbTweet = nbAnalyzer.getAnalyzedTweet(tweet);
 		 		
 		 		if(((StatusCSVImpl)nbTweet.getRawTweet()).getLabel() == nbTweet.getClassification()) {
 		 			nbGood++;

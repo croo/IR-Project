@@ -1,5 +1,6 @@
 package database.csv;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class CSVDatabase implements Database {
 	
 	private List<String> csvLines;
 
-	public CSVDatabase(String fileName) {
+	public CSVDatabase(String fileName) throws IOException {
 		csvLines = Utils.readAllLines(fileName);
 	}
 

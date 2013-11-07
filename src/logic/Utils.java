@@ -25,20 +25,17 @@ import java.util.Map;
 public class Utils
 {
     
-	public static List<String> readAllLines(String filename) {
+	public static List<String> readAllLines(String filename) throws IOException {
 		return readAllLines(filename,Charset.forName("UTF-8"));
 	}
 	
-    public static List<String> readAllLines(String filename, Charset charset){  
+    public static List<String> readAllLines(String filename, Charset charset) throws IOException {  
     	try {
 	        Path file = Paths.get(filename);  
 	        return Files.readAllLines(file,charset);  // with out loop we can read all the contents
     	}catch (InvalidPathException e) {
     		e.printStackTrace();
     		System.err.println("Reading-all-lines util couldn't find the given file with charset:" + Charset.defaultCharset().name());
-    	} catch (IOException e) {
-    		e.printStackTrace();
-    		System.err.println("Reading-all-lines util crashed with an IOException while reading " + filename + " file.");
     	}
 		return null;
     }

@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -92,21 +93,22 @@ public class TabPanes {
 					if(classifier[0].isSelected() || classifier[1].isSelected()) {
 						String query = hashQueryField.getText();
 						Database db = createDatabase();
-						
-						List<Status> tweets = db.getTweets(query);
-						HashTag hashtag = new HashTag(query);
-						coTrainer.setRawTweets(tweets);
-						if(classifier[0].isSelected()) {
-							slaAnalyzedTweets = slaClassifier.getAnalyzedTweets(tweets);
-							hashtag.addAll(slaAnalyzedTweets);
+						if(db != null) {
+							List<Status> tweets = db.getTweets(query);
+							HashTag hashtag = new HashTag(query);
+							coTrainer.setRawTweets(tweets);
+							if(classifier[0].isSelected()) {
+								slaAnalyzedTweets = slaClassifier.getAnalyzedTweets(tweets);
+								hashtag.addAll(slaAnalyzedTweets);
+							}
+							if(classifier[1].isSelected()) {
+								nbAnalyzedTweets = nbClassifier.getAnalyzedTweets(tweets);
+								hashtag.addAll(nbAnalyzedTweets);
+							}
+							
+							generateResultPanel(query, getClassifierName(), hashtag);
+							tabs.setSelectedIndex(tabs.getTabCount()-1);
 						}
-						if(classifier[1].isSelected()) {
-							nbAnalyzedTweets = nbClassifier.getAnalyzedTweets(tweets);
-							hashtag.addAll(nbAnalyzedTweets);
-						}
-						
-						generateResultPanel(query, getClassifierName(), hashtag);
-						tabs.setSelectedIndex(tabs.getTabCount()-1);
 					} else
 						JOptionPane.showOptionDialog(null, "Please select at least one option from CLASSIFIER SELECTION", "ALERT", JOptionPane.WARNING_MESSAGE, JOptionPane.WARNING_MESSAGE, null, new Object[]{"Ok"}, 0);
 				}
@@ -125,7 +127,12 @@ public class TabPanes {
 			private Database createDatabase() {
 				Database db = null;
 				if(hashCsvButton.isSelected()) {
+					try {
 					db = new CSVDatabase(hashCsvFileField.getText().trim());
+					} catch(IOException nsfe) {
+						JOptionPane.showOptionDialog(null, "No such file found\n Type another one", "ALERT", JOptionPane.WARNING_MESSAGE, JOptionPane.WARNING_MESSAGE, null, new Object[]{"OK"}, 0);
+						return null;
+					}
 				} else if (hashTweetAPIButton.isSelected()) {
 					db = new TwitterAPIDatabase();
 				}

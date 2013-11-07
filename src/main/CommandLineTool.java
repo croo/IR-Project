@@ -3,6 +3,7 @@ package main;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -29,7 +30,13 @@ public class CommandLineTool {
 		 	System.setProperty(org.slf4j.impl.SimpleLogger.SHOW_SHORT_LOG_NAME_KEY, "true");
 		 	
 		 	//Database database = new CSVDatabase("training_data/merged_tabbed_training_data.csv");
-		 	Database database = new CSVDatabase("training_data/testing_data_01.csv");
+		 	Database database = null;
+			try {
+				database = new CSVDatabase("training_data/testing_data_01.csv");
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		 	List<Status> tweets = database.getTweets("");
 		 	
 		 	SentiWordNet sentiWordNet = SentiWordNet.getInstance();

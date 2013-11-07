@@ -1,5 +1,6 @@
 package main.gui;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -219,7 +220,7 @@ public class TabPanes {
 		for(int i = 0; i < classifier.length; i++) {
 			classifier[i] = new JCheckBox(CLASSIFIER_DESCRIPTION[i]);
 			classifier[i].setFont(FONT);
-			classifier[i].setBounds(20, 270+(40*i), 400, 30);
+			classifier[i].setBounds(20, 270+(40*i), 300, 30);
 			hashPanel.add(classifier[i]);
 		}
 		
@@ -227,6 +228,20 @@ public class TabPanes {
 		searchHashButton.setFont(FONT);
 		searchHashButton.setBounds(250, 380, 100, 40);
 		hashPanel.add(searchHashButton);
+		
+		JLabel logoLabel = new JLabel(new ImageIcon("./images/twitter.png"));
+		logoLabel.setBounds(340, 180, 209, 160);
+		hashPanel.add(logoLabel);
+		
+		JTextArea kopimi = new JTextArea();
+		kopimi.setText("KOPIMI\nWeb Information Retrieval\nand Data Mining\nAll rights to copy");
+		kopimi.setFont(new Font("Courier", Font.ITALIC, 14));
+		kopimi.setLineWrap(true);
+		kopimi.setBackground(hashPanel.getBackground());
+		kopimi.setBounds(400, 340, 260, 100);
+		kopimi.setEditable(false);
+		hashPanel.add(kopimi);
+		
 		
 	}
 	
@@ -330,7 +345,7 @@ public class TabPanes {
 					uncertainButton[i][j].addActionListener(buttonListener);
 				}
 				uncertainArea[i] = new JTextArea();
-				uncertainArea[i].setFont(new Font("Courier", Font.PLAIN, 15));
+				uncertainArea[i].setFont(new Font("Courier", Font.PLAIN, 14));
 				uncertainArea[i].setBackground(resultPanel.getBackground());
 				uncertainArea[i].setText(uncertainTweets[i]);
 				uncertainArea[i].setLineWrap(true);

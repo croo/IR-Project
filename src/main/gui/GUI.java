@@ -1,7 +1,9 @@
 package main.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Image;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -30,6 +32,7 @@ public class GUI {
 		mainframe = new JFrame(FRAME_DESCR);
 		mainframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainframe.setSize(650, 520);
+		mainframe.setIconImage(new ImageIcon("./images/twitter.png").getImage());
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
 
